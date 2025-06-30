@@ -1,0 +1,24 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Log files
+*.log
+logs/
+npm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Optional: test coverage output
+coverage/
+
+# Optional: VSCode workspace settings
+.vscode/
+
+# Optional: production build files (if you compile something)
+dist/
+build/
