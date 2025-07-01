@@ -5,6 +5,13 @@ const router = express.Router();
 const _ = require('lodash');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const authorize = require('./../middleware/auth');
+
+
+router.get('/me', authorize , async (req, res) => {
+    const user = await User.findById(req.user._id).select('-password');
+    res.send(user);
+})
 
 router.get('/', async (req, res) => {
     const users = await User.find({});
