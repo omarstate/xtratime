@@ -1,6 +1,6 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const {Player} = require('./models/player');
+const {Player} = require('../models/player');
 
 mongoose.connect('mongodb://localhost/xtratime')
   .then(() => console.log('Connected to MongoDB...'))
@@ -11,26 +11,30 @@ async function fetchAndSavePlayers(searchTerm) {
   
   if (!data.player) return console.log('No players found.');
 
-  for (const p of data.player) {
-    const player = new Player({
-      playerId: p.idPlayer,
-      teamId: p.idTeam,
-      name: p.strPlayer,
-      team: p.strTeam,
-      sport: p.strSport,
-      strThumb: p.strThumb,
-      strCutout: p.strCutout,
-      nationality: p.strNationality,
-      dateOfBirth: p.dateBorn,
-      status: p.strStatus,
-      gender: p.strGender,
-      position: p.strPosition,
-      relevance: parseFloat(p.relevance)
+  let exists = await Player.findOne({playerId: data.player[0].idPlayer});
+  if (exists) return console.log('Player already exists');
+
+    let player = data.player[0];
+
+      player = new Player({
+      playerId: player.idPlayer,
+      teamId: player.idTeam,
+      name: player.strPlayer,
+      team: player.strTeam,
+      sport: player.strSport,
+      strThumb: player.strThumb,
+      strCutout: player.strCutout,
+      nationality: player.strNationality,
+      dateOfBirth: player.dateBorn,
+      status: player.strStatus,
+      gender: player.strGender,
+      position: player.strPosition,
+      relevance: parseFloat(player.relevance)
     });
 
     await player.save();
     console.log(`Saved: ${player.name}`);
   }
-}
 
-fetchAndSavePlayers("Mohamed Salah"); 
+
+fetchAndSavePlayers("Salah"); 

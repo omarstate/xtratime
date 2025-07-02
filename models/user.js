@@ -1,3 +1,4 @@
+require('dotenv').config(); // 👈 add this line FIRST
 const Joi = require('joi');
 const { required, bool } = require('joi');
 const mongoose = require('mongoose');

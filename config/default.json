@@ -1,4 +1,4 @@
 {
     "jwtPrivateKey": "",
-    "db": "mongodb://localhost/xtratime"
+    "db": "mongodb://localhost:27017/xtratime"
 }

@@ -1,135 +1,280 @@
-import React, { useRef, useState } from "react";
-import "./TiltedCard.css";
+import React from 'react';
+import { motion } from 'framer-motion';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Chip from '@mui/material/Chip';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import WorkIcon from '@mui/icons-material/Work';
 
-export default function TiltedCard({
+const GENERIC_STADIUM_IMAGE = process.env.PUBLIC_URL + '/assets/stadiums/generic-stadium.svg';
+
+const TiltedCard = ({
   imageSrc,
-  altText = "Tilted card image",
-  captionText = "",
-  containerHeight = "300px",
-  containerWidth = "100%",
-  imageHeight = "300px",
-  imageWidth = "300px",
-  scaleOnHover = 1.1,
-  rotateAmplitude = 14,
-  showMobileWarning = true,
+  altText,
+  captionText,
+  containerHeight = '320px',
+  containerWidth = '100%',
+  imageHeight = '200px',
+  imageWidth = '200px',
+  imageStyle = {},
+  rotateAmplitude = 5,
+  scaleOnHover = 1.05,
+  showMobileWarning = false,
   showTooltip = true,
-  overlayContent = null,
   displayOverlayContent = false,
-}) {
-  const ref = useRef(null);
-  const [transform, setTransform] = useState({
-    rotateX: 0,
-    rotateY: 0,
-    scale: 1,
+  overlayContent,
+  variant = 'default'
+}) => {
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [imgSrc, setImgSrc] = React.useState(imageSrc);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const cardRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setImgSrc(imageSrc);
+  }, [imageSrc]);
+
+  const handleImageError = () => {
+    console.log('Image failed to load:', imgSrc);
+    setImgSrc(process.env.PUBLIC_URL + '/assets/stadiums/generic-stadium.svg');
+  };
+
+  const handleMouseMove = (e) => {
+    if (isMobile && showMobileWarning) return;
+
+    const card = cardRef.current;
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -rotateAmplitude;
+    const rotateY = ((x - centerX) / centerX) * rotateAmplitude;
+
+    card.style.transform = `
+      perspective(1000px)
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+      scale(${isHovered ? scaleOnHover : 1})
+    `;
+  };
+
+  const handleMouseLeave = () => {
+    if (isMobile && showMobileWarning) return;
+    
+    const card = cardRef.current;
+    if (!card) return;
+
+    card.style.transform = `
+      perspective(1000px)
+      rotateX(0deg)
+      rotateY(0deg)
+      scale(1)
+    `;
+    setIsHovered(false);
+  };
+
+  const handleMouseEnter = () => {
+    if (isMobile && showMobileWarning) return;
+    setIsHovered(true);
+  };
+
+  const playerDetails = React.useMemo(() => {
+    if (!overlayContent) return null;
+    
+    const content = overlayContent.props.children;
+    if (Array.isArray(content)) {
+      return content.filter(child => child.type === Typography).map(child => {
+        const text = child.props.children;
+        if (Array.isArray(text)) {
+          const [label, value] = text;
+          return { label: label.props.children, value };
+        }
+        return { value: text };
+      });
+    }
+    return null;
+  }, [overlayContent]);
+
+  const getImageContainerStyles = () => ({
+    width: '100%',
+    height: imageHeight,
+    position: 'relative',
+    overflow: 'hidden',
+    borderRadius: '20px 20px 0 0',
+    background: theme.palette.mode === 'dark' 
+      ? 'linear-gradient(135deg, rgba(45,52,54,0.4) 0%, rgba(0,184,148,0.1) 100%)'
+      : 'linear-gradient(135deg, rgba(248,249,250,1) 0%, rgba(0,184,148,0.05) 100%)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   });
-  const [tooltipStyle, setTooltipStyle] = useState({
-    x: 0,
-    y: 0,
-    opacity: 0,
-    rotate: 0,
-  });
-  const [lastY, setLastY] = useState(0);
 
-  function handleMouse(e) {
-    if (!ref.current) return;
+  const getImageStyles = () => {
+    const baseStyles = {
+      transition: 'transform 0.3s ease-out',
+      transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+    };
 
-    const rect = ref.current.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left - rect.width / 2;
-    const offsetY = e.clientY - rect.top - rect.height / 2;
+    if (variant === 'stadium') {
+      return {
+        ...baseStyles,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        ...imageStyle
+      };
+    }
 
-    const rotationX = (offsetY / (rect.height / 2)) * -rotateAmplitude;
-    const rotationY = (offsetX / (rect.width / 2)) * rotateAmplitude;
-
-    setTransform({
-      rotateX: rotationX,
-      rotateY: rotationY,
-      scale: scaleOnHover,
-    });
-
-    const velocityY = offsetY - lastY;
-    setTooltipStyle({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      opacity: 1,
-      rotate: -velocityY * 0.6,
-    });
-    setLastY(offsetY);
-  }
-
-  function handleMouseEnter() {
-    setTransform(prev => ({ ...prev, scale: scaleOnHover }));
-  }
-
-  function handleMouseLeave() {
-    setTransform({
-      rotateX: 0,
-      rotateY: 0,
-      scale: 1,
-    });
-    setTooltipStyle({
-      x: 0,
-      y: 0,
-      opacity: 0,
-      rotate: 0,
-    });
-  }
+    return {
+      ...baseStyles,
+      height: '100%',
+      width: '100%',
+      objectFit: 'contain',
+      filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.1))',
+      ...imageStyle
+    };
+  };
 
   return (
-    <figure
-      ref={ref}
-      className="tilted-card-figure"
-      style={{
+    <Box
+      component={motion.div}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.6,
+        ease: [0.43, 0.13, 0.23, 0.96],
+      }}
+      sx={{
+        position: 'relative',
         height: containerHeight,
         width: containerWidth,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease-out',
+        transformStyle: 'preserve-3d',
+        borderRadius: '20px',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(45,52,54,0.3)' : 'background.paper',
+        backdropFilter: 'blur(10px)',
+        boxShadow: isHovered
+          ? '0 20px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,184,148,0.1)'
+          : '0 10px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,184,148,0.05)',
       }}
-      onMouseMove={handleMouse}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      {showMobileWarning && (
-        <div className="tilted-card-mobile-alert">
-          This effect is not optimized for mobile. Check on desktop.
-        </div>
-      )}
+      <Box sx={getImageContainerStyles()}>
+        <Box
+          component="img"
+          src={imgSrc}
+          alt={altText}
+          onError={handleImageError}
+          sx={getImageStyles()}
+        />
+      </Box>
 
-      <div
-        className="tilted-card-inner"
-        style={{
-          width: imageWidth,
-          height: imageHeight,
-          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          transition: 'transform 0.1s ease-out',
+      <Box
+        sx={{
+          width: '100%',
+          p: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 1.5,
+          flex: 1,
+          background: theme.palette.mode === 'dark' ? 'rgba(45,52,54,0.3)' : 'background.paper',
+          borderRadius: '0 0 20px 20px'
         }}
       >
-        <img
-          src={imageSrc}
-          alt={altText}
-          className="tilted-card-img"
-          style={{
-            width: imageWidth,
-            height: imageHeight,
-          }}
-        />
-
-        {displayOverlayContent && overlayContent && (
-          <div className="tilted-card-overlay">
-            {overlayContent}
-          </div>
-        )}
-      </div>
-
-      {showTooltip && (
-        <figcaption
-          className="tilted-card-caption"
-          style={{
-            transform: `translate(${tooltipStyle.x}px, ${tooltipStyle.y}px) rotate(${tooltipStyle.rotate}deg)`,
-            opacity: tooltipStyle.opacity,
-            transition: 'opacity 0.2s ease, transform 0.1s ease-out',
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 600,
+            fontSize: '1rem',
+            textAlign: 'left',
+            color: 'text.primary',
+            letterSpacing: '-0.01em',
+            transform: isHovered ? 'translateZ(10px)' : 'translateZ(0)',
+            transition: 'transform 0.3s ease-out',
           }}
         >
           {captionText}
-        </figcaption>
-      )}
-    </figure>
+        </Typography>
+        
+        {playerDetails && (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {playerDetails.map((detail, index) => {
+              if (detail.label === 'Team:') {
+                return (
+                  <Chip
+                    key={index}
+                    size="small"
+                    icon={<WorkIcon />}
+                    label={detail.value}
+                    sx={{
+                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,184,148,0.1)' : 'rgba(0,184,148,0.05)',
+                      color: 'text.primary',
+                      '& .MuiChip-icon': {
+                        color: 'secondary.main',
+                      },
+                    }}
+                  />
+                );
+              }
+              if (detail.label === 'Nationality:') {
+                return (
+                  <Chip
+                    key={index}
+                    size="small"
+                    icon={<LocationOnIcon />}
+                    label={detail.value}
+                    sx={{
+                      backgroundColor: theme.palette.mode === 'dark' ? 'rgba(0,184,148,0.1)' : 'rgba(0,184,148,0.05)',
+                      color: 'text.primary',
+                      '& .MuiChip-icon': {
+                        color: 'secondary.main',
+                      },
+                    }}
+                  />
+                );
+              }
+              if (detail.label === 'Position:') {
+                return (
+                  <Typography
+                    key={index}
+                    variant="body2"
+                    sx={{
+                      color: 'text.secondary',
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                      transform: isHovered ? 'translateZ(10px)' : 'translateZ(0)',
+                      transition: 'transform 0.3s ease-out',
+                    }}
+                  >
+                    {detail.value}
+                  </Typography>
+                );
+              }
+              return null;
+            })}
+          </Box>
+        )}
+
+        {displayOverlayContent && overlayContent}
+      </Box>
+    </Box>
   );
-}
+};
+
+export default TiltedCard;

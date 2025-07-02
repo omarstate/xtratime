@@ -1,17 +1,24 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
-const Stadium = require('../models/stadium');
+const {Stadium} = require('../models/stadium');
 
 mongoose.connect('mongodb://localhost/xtratime')
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('DB connection failed:', err));
 
 async function fetchAndSaveStadiums(searchTerm) {
-  const {data} = await axios.get(`https://www.thesportsdb.com/api/v1/json/123/searchvenues.php?p=${searchTerm}`);
-  // check if stadium already exists
-  if (!data.venue) return console.log('No Stadiums found.');
-  // save stadium
-  for (const p of data.venue) {
+  const { data } = await axios.get(`https://www.thesportsdb.com/api/v1/json/123/searchvenues.php?v=${searchTerm}`);
+  
+  if (!data.venues) return console.log('No Stadiums found.');
+  if (!data.venues[0].) return console.log('No Stadiums found.');
+
+  for (const p of data.venues) {
+    const exists = await Stadium.findOne({ idVenue: p.idVenue });
+    if (exists) {
+      console.log(`Already exists: ${p.strVenue}`);
+      continue;
+    }
+
     const stadium = new Stadium({
       idVenue: p.idVenue,
       idDupe: p.idDupe,
@@ -34,9 +41,7 @@ async function fetchAndSaveStadiums(searchTerm) {
 
     await stadium.save();
     console.log(`Saved: ${stadium.strVenue}`);
-
+  }
 }
 
-}
-
-fetchAndSaveStadiums("Wembley");
+fetchAndSaveStadiums("Wanda");

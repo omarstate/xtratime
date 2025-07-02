@@ -1,0 +1,126 @@
+/* Typography System */
+
+/* Import fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Font Families */
+  --font-serif: 'Crimson Pro', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Font Sizes */
+  font-size: 62.5%; /* Base 10px for easier rem calculations */
+  
+  --fs-xs: 1.2rem;   /* 12px */
+  --fs-sm: 1.4rem;   /* 14px */
+  --fs-base: 1.6rem; /* 16px */
+  --fs-lg: 1.8rem;   /* 18px */
+  --fs-xl: 2.0rem;   /* 20px */
+  --fs-2xl: 2.4rem;  /* 24px */
+  --fs-3xl: 3.0rem;  /* 30px */
+  --fs-4xl: 3.6rem;  /* 36px */
+  --fs-5xl: 4.0rem;  /* 40px */
+
+  /* Line Heights */
+  --lh-tight: 110%;
+  --lh-snug: 120%;
+  --lh-normal: 140%;
+  --lh-relaxed: 160%;
+
+  /* Letter Spacing */
+  --ls-tight: -0.02rem;
+  --ls-normal: 0;
+  --ls-wide: 0.02rem;
+
+  /* Font Weights */
+  --fw-thin: 100;
+  --fw-extralight: 200;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
+  --fw-black: 900;
+}
+
+/* Base Typography Styles */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  font-weight: var(--fw-regular);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+
+h1 {
+  font-size: var(--fs-5xl);
+  font-weight: var(--fw-bold);
+}
+
+h2 {
+  font-size: var(--fs-4xl);
+  font-weight: var(--fw-semibold);
+}
+
+h3 {
+  font-size: var(--fs-3xl);
+  font-weight: var(--fw-medium);
+}
+
+h4, h5, h6 {
+  font-family: var(--font-sans);
+  line-height: var(--lh-snug);
+}
+
+h4 {
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-semibold);
+}
+
+h5 {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-medium);
+}
+
+h6 {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+}
+
+p {
+  margin-bottom: 1.5rem;
+  line-height: var(--lh-relaxed);
+}
+
+small {
+  font-size: var(--fs-sm);
+}
+
+.text-xs { font-size: var(--fs-xs); }
+.text-sm { font-size: var(--fs-sm); }
+.text-base { font-size: var(--fs-base); }
+.text-lg { font-size: var(--fs-lg); }
+.text-xl { font-size: var(--fs-xl); }
+.text-2xl { font-size: var(--fs-2xl); }
+.text-3xl { font-size: var(--fs-3xl); }
+.text-4xl { font-size: var(--fs-4xl); }
+.text-5xl { font-size: var(--fs-5xl); }
+
+.font-thin { font-weight: var(--fw-thin); }
+.font-extralight { font-weight: var(--fw-extralight); }
+.font-light { font-weight: var(--fw-light); }
+.font-normal { font-weight: var(--fw-regular); }
+.font-medium { font-weight: var(--fw-medium); }
+.font-semibold { font-weight: var(--fw-semibold); }
+.font-bold { font-weight: var(--fw-bold); }
+.font-extrabold { font-weight: var(--fw-extrabold); }
+.font-black { font-weight: var(--fw-black); }
+
+.font-serif { font-family: var(--font-serif); }
+.font-sans { font-family: var(--font-sans); } 
