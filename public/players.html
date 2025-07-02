@@ -6,9 +6,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-main: #f7fafd;
+      --bg-main: #102542;
       --bg-card: #fff;
-      --accent: #2563eb;
+      --accent: #F87060;
       --accent2: #60a5fa;
       --text-main: #1e293b;
       --text-secondary: #64748b;
@@ -140,9 +140,136 @@
         padding: 20px 8px 16px 8px;
       }
     }
+    .navbar {
+      width: 100%;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px) saturate(1.3);
+      box-shadow: 0 2px 12px #0001;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 64px;
+      position: relative;
+    }
+    .nav-logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+      user-select: none;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+      margin: 0;
+      padding: 0;
+      transition: right 0.35s cubic-bezier(.22,1,.36,1);
+    }
+    .nav-link {
+      text-decoration: none;
+      color: var(--bg-main);
+      font-weight: 500;
+      font-size: 1.08rem;
+      padding: 8px 0;
+      border-bottom: 2.5px solid transparent;
+      transition: color 0.22s, border 0.22s;
+      position: relative;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--accent);
+      border-bottom: 2.5px solid var(--accent);
+    }
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 38px;
+      height: 38px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 20;
+      margin-left: 16px;
+      transition: background 0.2s;
+    }
+    .bar {
+      width: 24px;
+      height: 3px;
+      background: var(--accent);
+      margin: 3px 0;
+      border-radius: 2px;
+      transition: all 0.32s cubic-bezier(.22,1,.36,1);
+    }
+    @media (max-width: 900px) {
+      .nav-container {
+        padding: 0 2vw;
+      }
+      .nav-links {
+        gap: 18px;
+      }
+    }
+    @media (max-width: 700px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100vw;
+        height: 100vh;
+        width: 70vw;
+        max-width: 320px;
+        background: rgba(255,255,255,0.95);
+        box-shadow: -2px 0 16px #0002;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 80px 32px 0 32px;
+        gap: 28px;
+        transition: right 0.35s cubic-bezier(.22,1,.36,1);
+      }
+      .nav-links.open {
+        right: 0;
+      }
+      .nav-toggle {
+        display: flex;
+      }
+    }
+    .nav-toggle.open .bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    .nav-toggle.open .bar:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle.open .bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
   </style>
 </head>
 <body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <span class="nav-logo">XtraTime</span>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link">Matches</a></li>
+        <li><a href="#" class="nav-link active">Players</a></li>
+        <li><a href="#" class="nav-link">Stadiums</a></li>
+        <li><a href="#" class="nav-link">Leagues</a></li>
+      </ul>
+    </div>
+  </nav>
   <h1>Players</h1>
   <div id="players"></div>
 
@@ -167,6 +294,23 @@
       });
     }
     fetchPlayers();
+
+    // Responsive Navbar Toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      navToggle.addEventListener('click', function() {
+        navToggle.classList.toggle('open');
+        navLinks.classList.toggle('open');
+      });
+      // Close menu on link click (mobile)
+      navLinks.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          navToggle.classList.remove('open');
+          navLinks.classList.remove('open');
+        });
+      });
+    });
   </script>
 </body>
 </html>
