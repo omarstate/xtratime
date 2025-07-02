@@ -10,7 +10,6 @@ async function fetchAndSaveStadiums(searchTerm) {
   const { data } = await axios.get(`https://www.thesportsdb.com/api/v1/json/123/searchvenues.php?v=${searchTerm}`);
   
   if (!data.venues) return console.log('No Stadiums found.');
-  if (!data.venues[0].) return console.log('No Stadiums found.');
 
   for (const p of data.venues) {
     const exists = await Stadium.findOne({ idVenue: p.idVenue });
