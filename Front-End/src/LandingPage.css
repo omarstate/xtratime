@@ -1,0 +1,505 @@
+body, .landing-page {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 48px 0 48px;
+  width: 100%;
+  gap: 32px;
+  box-sizing: border-box;
+}
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-left: 0;
+}
+.navbar-logo {
+  height: 44px;
+  width: 44px;
+}
+.navbar-links {
+  display: flex;
+  gap: 35px;
+  list-style: none;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+.navbar-links li {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.navbar-links li:hover {
+  color: #ff5c1b;
+}
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 0;
+}
+.navbar-search {
+  background: rgba(255,255,255,0.12);
+  border: none;
+  border-radius: 24px;
+  padding: 14px 36px;
+  color: #fff;
+  font-size: 1.15rem;
+  width: 320px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+.navbar-search:focus {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+.navbar-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+/* Main grid layout */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1.5fr 1.5fr 1.2fr 1.2fr;
+  grid-template-rows: 1fr 340px 1fr 0.7fr 0.7fr;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 48px auto 0 auto;
+  padding: 0 48px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 4px 2px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+}
+.glass-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
+}
+
+/* Grid item positions (example, adjust as needed) */
+.grid-top-leagues {
+  min-width: 750px;
+  min-height: 200px;
+  grid-column: 1 / span 3;
+  grid-row: 1 / span 1;
+}
+.grid-league-table {
+  grid-column: 4 / span 2;
+  grid-row: 1 / span 3;
+  height: 720px;
+  min-height: 340px;
+  max-height: 720px;
+  display: flex;
+}
+.grid-top-player { grid-column: 1 / span 1; grid-row: 2 / span 2; }
+.grid-news { grid-column: 2 / span 2; grid-row: 2 / span 2; }
+.grid-match1 { grid-column: 1 / span 2; grid-row: 4 / span 2; }
+.grid-match2 { grid-column: 3 / span 2; grid-row: 4 / span 2; }
+.grid-top-scorers { grid-column: 5 / span 1; grid-row: 4 / span 2; }
+.grid-today-matches {
+  grid-column: 1 / span 5;
+  grid-row: 3 / span 1;
+  height: 350px;
+  min-height: 120px;
+  max-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Utility */
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.bold { font-weight: bold; }
+.white { color: #fff; }
+
+/* Top Leagues card styles */
+.top-leagues-title {
+  font-size: 2.6rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 24px;
+  margin-left: 8px;
+  text-align: left;
+  padding: 40px 20px 20px 20px;
+  text-transform: uppercase;
+}
+.league-icons-row {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-left: 8px; 
+  padding:10px 20px 10px 20px;
+}
+.league-icon-glass {
+  background: rgba(255,255,255,0.22);
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  min-height: 60px;
+  position: relative;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.league-icon-glass img {
+  width: 54px;
+  height: 54px;
+  transition: transform 0.2s;
+}
+.league-icon-glass:hover {
+  background: #fff;
+  transform: scale(1.08);
+  z-index: 2;
+}
+.league-icon-glass:hover img {
+  filter: none;
+}
+.league-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  background: #1976ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.league-badge img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+/* Top Player Card (Lewandowski) */
+.top-player-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.top-player-card img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.top-player-card .overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
+  border-radius: 20px;
+  z-index: 2;
+}
+
+.top-player-card .content {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 32px 28px 0 28px;
+}
+
+.top-player-card .title {
+  font-size: 2.6rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.top-player-card .player-info {
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  text-align: left;
+}
+
+/* News Card (Jota) */
+.news-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.news-card img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.news-card .overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
+  border-radius: 20px;
+  z-index: 2;
+}
+
+.news-card .content {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 32px 28px 0 28px;
+}
+
+.news-card .title {
+  font-size: 2.6rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.news-card .player-info {
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 1100px) {
+  .main-grid { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: repeat(7, 1fr); }
+  .grid-top-leagues { grid-column: 1 / span 3; grid-row: 1 / span 1; }
+  .grid-league-table { grid-column: 1 / span 3; grid-row: 2 / span 2; }
+  .grid-top-player { grid-column: 1 / span 1; grid-row: 4 / span 2; }
+  .grid-news { grid-column: 2 / span 2; grid-row: 4 / span 2; }
+  .grid-match1 { grid-column: 1 / span 2; grid-row: 6 / span 2; }
+  .grid-match2 { grid-column: 3 / span 1; grid-row: 6 / span 2; }
+  .grid-top-scorers { grid-column: 1 / span 3; grid-row: 8 / span 1; }
+}
+
+.grid-top-player,
+.grid-news {
+  height: 340px;
+  min-height: 340px;
+  max-height: 340px;
+  display: flex;
+}
+
+.top-player-card,
+.news-card {
+  height: 100%;
+}
+
+.top-player-card .content,
+.news-card .content {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 32px 28px 0 28px;
+}
+
+.grid-league-table .glass-card {
+  height: 100%;
+}
+
+.today-matches-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 28px;
+  max-width: 100%;
+  margin: 0 auto;
+  width: 100%;
+  overflow-x: auto;
+  padding: 0 32px;
+  scrollbar-width: none;
+}
+.today-matches-list::-webkit-scrollbar {
+  display: none;
+}
+
+.today-match-card {
+  min-width: 450px;
+  max-width: 530px;
+  flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 4px 2px rgba(255, 255, 255, 0.2);
+  padding: 18px 24px;
+  gap: 1px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.today-match-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.today-match-header {
+  font-size: 0.85rem;
+  color: #bdbdbd;
+  font-weight: 600;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.today-match-teams {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.today-match-team {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.today-match-team img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.today-match-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.today-match-indicators {
+  display: flex;
+  gap: 2px;
+}
+
+.today-match-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: #4caf50;
+}
+
+.today-match-indicator.red {
+  background: #e53935;
+}
+
+.today-match-channel {
+  font-size: 0.85rem;
+  color: #bdbdbd;
+  font-weight: 600;
+}
+
+.today-match-time {
+  font-size: 0.95rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+.today-match-bell {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  cursor: pointer;
+  filter: brightness(1.5);
+}
