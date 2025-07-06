@@ -22,3 +22,6 @@ coverage/
 # Optional: production build files (if you compile something)
 dist/
 build/
+
+# YoYo AI version control directory
+.yoyo/

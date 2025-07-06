@@ -6,35 +6,92 @@ mongoose.connect('mongodb://localhost/xtratime')
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('DB connection failed:', err));
 
-async function fetchAndSavePlayers(searchTerm) {
-  const { data } = await axios.get(`https://www.thesportsdb.com/api/v1/json/123/searchplayers.php?p=${searchTerm}`);
-  
-  if (!data.player) return console.log('No players found.');
+// Top teams from Premier League (you can modify this list)
+const TEAM_IDS = [
+  40, // Liverpool
+  42, // Arsenal
+  50, // Manchester City
+  33, // Manchester United
+  47, // Tottenham
+  49  // Chelsea
+];
 
-  let exists = await Player.findOne({playerId: data.player[0].idPlayer});
-  if (exists) return console.log('Player already exists');
-
-    let player = data.player[0];
-
-      player = new Player({
-      playerId: player.idPlayer,
-      teamId: player.idTeam,
-      name: player.strPlayer,
-      team: player.strTeam,
-      sport: player.strSport,
-      strThumb: player.strThumb,
-      strCutout: player.strCutout,
-      nationality: player.strNationality,
-      dateOfBirth: player.dateBorn,
-      status: player.strStatus,
-      gender: player.strGender,
-      position: player.strPosition,
-      relevance: parseFloat(player.relevance)
-    });
-
-    await player.save();
-    console.log(`Saved: ${player.name}`);
+const options = {
+  method: 'GET',
+  url: 'https://api-football-v1.p.rapidapi.com/v3/players/squads',
+  headers: {
+    'x-rapidapi-key': '75f922d36amshe618242327200fbp1c50eejsnb09dd4612ef5',
+    'x-rapidapi-host': 'api-football-v1.p.rapidapi.com'
   }
+};
+
+async function fetchDataAndSave() {
+  try {
+    let totalPlayers = 0;
+    
+    for (const teamId of TEAM_IDS) {
+      console.log(`Fetching squad for team ID: ${teamId}...`);
+      
+      options.params = { team: teamId };
+      const response = await axios.request(options);
+      
+      if (response.data.response[0]?.players) {
+        const players = response.data.response[0].players;
+        console.log(`Found ${players.length} players in squad`);
+        
+        for (const playerData of players) {
+          const player = new Player({
+            id: playerData.id,
+            name: playerData.name,
+            firstname: playerData.firstname || '',
+            lastname: playerData.lastname || '',
+            age: playerData.age,
+            birth: {
+              date: null, // Squad endpoint doesn't provide birth details
+              place: null,
+              country: null
+            },
+            nationality: playerData.nationality,
+            height: playerData.height || null,
+            weight: playerData.weight || null,
+            number: playerData.number,
+            position: playerData.position,
+            photo: playerData.photo
+          });
+          
+          try {
+            await player.save();
+            console.log(`Saved: ${player.name}`);
+            totalPlayers++;
+          } catch (err) {
+            if (err.code === 11000) {
+              console.log(`Player ${player.name} already exists, skipping...`);
+            } else {
+              console.error(`Error saving player ${player.name}:`, err.message);
+            }
+          }
+        }
+      }
+      
+      // Wait 6 seconds before next request to respect rate limits
+      if (teamId !== TEAM_IDS[TEAM_IDS.length - 1]) { // Don't wait after last team
+        console.log('Waiting 6 seconds before next request...');
+        await new Promise(resolve => setTimeout(resolve, 6000));
+      }
+    }
+    
+    console.log(`Finished! Total players saved: ${totalPlayers}`);
+  } catch (error) {
+    console.error('Error fetching players:', error.message);
+    if (error.response) {
+      console.error('API response error:', error.response.data);
+    }
+  } finally {
+    mongoose.disconnect();
+  }
+}
+
+fetchDataAndSave();
 
 
-fetchAndSavePlayers("Salah"); 
+  
