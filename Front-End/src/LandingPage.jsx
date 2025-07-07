@@ -38,30 +38,159 @@ const LandingPage = () => {
       {/* Main grid layout */}
       <div className="main-grid" style={{position: 'relative', zIndex: 1}}>
         {/* Top Leagues */}
-        <div className="glass-card grid-top-leagues">
+        <div className=" grid-top-leagues">
           <div className="top-leagues-title">Top Leagues</div>
           <div className="league-icons-row">
-            <div className="league-icon-glass" style={{position: 'relative'}}>
+            <div className=" glass-card league-icon-glass" style={{position: 'relative'}}>
               <img src="/images/pngwing.com 1.png" alt="Premier League" />
               <span className="league-badge">
                 <img src="/images/notification-2 1.png" alt="badge" />
               </span>
             </div>
-            <div className="league-icon-glass">
+            <div className=" glass-card league-icon-glass">
               <img src="/images/laliga-seeklogo 1.png" alt="La Liga" />
             </div>
-            <div className="league-icon-glass">
+            <div className=" glass-card league-icon-glass">
               <img src="/images/pngwing.com-3 1.png" alt="Champions League" />
             </div>
-            <div className="league-icon-glass">
+            <div className=" glass-card league-icon-glass">
               <img src="/images/pngwing.com-2 1.png" alt="Bundesliga" />
             </div>
           </div>
         </div>
 
-        {/* League Table */}
-        <div className="glass-card grid-league-table" style={{padding: 0, overflow: 'hidden'}}>
-          <img src="/images/481111091_1265260571625564_3913554759385537875_n.jpg" alt="League Table" style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: 20}} />
+        {/* Live Scores & Stats - Replacing League Table */}
+        <div className="glass-card grid-league-table" style={{padding: 32, display: 'flex', flexDirection: 'column', gap: 24}}>
+          <div style={{fontSize: '2.4rem', fontWeight: 800, color: '#fff', marginBottom: 8, textAlign: 'center'}}>
+            Live Scores & Stats
+          </div>
+          
+          {/* Live Match Card */}
+          <div className="glass-card" style={{
+            background: 'rgba(255, 255, 255, 0.12)',
+            borderRadius: 20,
+            padding: 24,
+            border: '1px solid rgba(255, 255, 255, 0.25)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+                <img src="/images/pngwing.com-1.png" alt="Premier League" style={{width: 24, height: 24}} />
+                <span style={{color: '#bdbdbd', fontSize: '1rem', fontWeight: 600}}>Premier League</span>
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
+                <div style={{width: 10, height: 10, borderRadius: '50%', background: '#ff4444', animation: 'pulse 2s infinite'}}></div>
+                <span style={{color: '#ff4444', fontSize: '1rem', fontWeight: 700}}>LIVE</span>
+              </div>
+            </div>
+            
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 16, flex: 1}}>
+                <img src="/images/pngwing.com-5 1.png" alt="Liverpool" style={{width: 40, height: 40, borderRadius: '50%'}} />
+                <span style={{color: '#fff', fontWeight: 700, fontSize: '1.2rem'}}>Liverpool</span>
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', gap: 20}}>
+                <span style={{color: '#fff', fontWeight: 900, fontSize: '2rem'}}>2</span>
+                <span style={{color: '#bdbdbd', fontSize: '1.1rem', fontWeight: 600}}>vs</span>
+                <span style={{color: '#fff', fontWeight: 900, fontSize: '2rem'}}>1</span>
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', gap: 16, flex: 1, justifyContent: 'flex-end'}}>
+                <span style={{color: '#fff', fontWeight: 700, fontSize: '1.2rem'}}>Man City</span>
+                <img src="/images/pngwing.com-4 1.png" alt="Man City" style={{width: 40, height: 40, borderRadius: '50%'}} />
+              </div>
+            </div>
+            
+            <div style={{textAlign: 'center'}}>
+              <span style={{color: '#bdbdbd', fontSize: '1rem', fontWeight: 600}}>67'</span>
+            </div>
+          </div>
+
+          {/* Stats Cards Row */}
+          <div style={{display: 'flex', gap: 20, flex: 1}}>
+            {/* Top Scorer Card */}
+            <div className="glass-card" style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: 16,
+              padding: 20,
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 12
+            }}>
+              <img src="/images/salah.jpeg" alt="Top Scorer" style={{width: 56, height: 56, borderRadius: '50%', objectFit: 'cover'}} />
+              <span style={{color: '#fff', fontWeight: 700, fontSize: '1rem', textAlign: 'center'}}>Top Scorer</span>
+              <span style={{color: '#ffe600', fontWeight: 900, fontSize: '1.4rem'}}>31</span>
+            </div>
+
+            {/* Assists Leader Card */}
+            <div className="glass-card" style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: 16,
+              padding: 20,
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 12
+            }}>
+              <img src="/images/lewa.jpg" alt="Assists Leader" style={{width: 56, height: 56, borderRadius: '50%', objectFit: 'cover'}} />
+              <span style={{color: '#fff', fontWeight: 700, fontSize: '1rem', textAlign: 'center'}}>Assists</span>
+              <span style={{color: '#00ff88', fontWeight: 900, fontSize: '1.4rem'}}>18</span>
+            </div>
+
+            {/* Clean Sheets Card */}
+            <div className="glass-card" style={{
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: 16,
+              padding: 20,
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 12
+            }}>
+              <div style={{width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(45deg, #4CAF50, #8BC34A)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <span style={{color: '#fff', fontWeight: 900, fontSize: '1.8rem'}}>🧤</span>
+              </div>
+              <span style={{color: '#fff', fontWeight: 700, fontSize: '1rem', textAlign: 'center'}}>Clean Sheets</span>
+              <span style={{color: '#4CAF50', fontWeight: 900, fontSize: '1.4rem'}}>12</span>
+            </div>
+          </div>
+
+          {/* Recent Results */}
+          <div style={{flex: 1, display: 'flex', flexDirection: 'column', gap: 12}}>
+            <span style={{color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginBottom: 12}}>Recent Results</span>
+            {[
+              {home: 'Arsenal', away: 'Chelsea', score: '3-1', league: 'Premier League'},
+              {home: 'Barcelona', away: 'Real Madrid', score: '2-2', league: 'La Liga'},
+              {home: 'Bayern', away: 'Dortmund', score: '4-0', league: 'Bundesliga'}
+            ].map((match, index) => (
+              <div key={index} className="glass-card" style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: 12,
+                padding: 16,
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <div style={{display: 'flex', alignItems: 'center', gap: 12, flex: 1}}>
+                  <span style={{color: '#fff', fontWeight: 600, fontSize: '1rem'}}>{match.home}</span>
+                </div>
+                <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+                  <span style={{color: '#fff', fontWeight: 700, fontSize: '1.1rem'}}>{match.score}</span>
+                </div>
+                <div style={{display: 'flex', alignItems: 'center', gap: 12, flex: 1, justifyContent: 'flex-end'}}>
+                  <span style={{color: '#fff', fontWeight: 600, fontSize: '1rem'}}>{match.away}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Top Player */}
