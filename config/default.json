@@ -1,4 +1,5 @@
 {
     "jwtPrivateKey": "",
-    "db": "mongodb://localhost:27017/xtratime"
+    "db_local": "mongodb://localhost:27017/xtratime",
+    "db_remote": "mongodb+srv://omarstate10:Xtratime2025@cluster0.r6hqo5i.mongodb.net/xtratime?retryWrites=true&w=majority&appName=Cluster0"
 }
