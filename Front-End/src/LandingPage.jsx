@@ -1,530 +1,356 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LandingPage.css';
+import SignIn from './SignIn';
+import GetStarted from './GetStarted';
+
+const leagues = [
+  { name: 'Premier League', icon: '🏴' },
+  { name: 'Champions League', icon: '⚽️' },
+  { name: 'LaLiga', icon: '🇪🇸' },
+  { name: 'FIFA World Cup', icon: '🏆' },
+  { name: 'Serie A', icon: '🇮🇹' },
+  { name: 'Europa League', icon: '🥈' },
+  { name: 'Bundesliga', icon: '🇩🇪' },
+  { name: 'Ligue 1', icon: '🇫🇷' },
+  { name: 'CAF Champions League', icon: '🌍' },
+];
+
+const matches = [
+  {
+    league: 'CONCACAF Gold Cup Final',
+    home: { name: 'USA', flag: '🇺🇸' },
+    away: { name: 'Mexico', flag: '🇲🇽' },
+    score: '1 - 2',
+    status: 'FT',
+  },
+  {
+    league: 'United States - Major League Soccer',
+    home: { name: 'Seattle Sounders', flag: '🟢' },
+    away: { name: 'Columbus', flag: '🟩' },
+    score: '1 - 1',
+    status: 'FT',
+  },
+  {
+    league: 'Friendlies',
+    home: { name: 'Senegal', flag: '🇸🇳' },
+    away: { name: 'Guinea', flag: '🇬🇳' },
+    score: '1 - 0',
+    status: 'FT',
+  },
+  {
+    league: "Women's EURO",
+    home: { name: 'Spain', flag: '🇪🇸' },
+    away: { name: 'Belgium', flag: '🇧🇪' },
+    score: '6 - 2',
+    status: 'FT',
+  },
+];
+
+const transfers = [
+  { name: 'Jhon Duran', clubs: 'Inter → Aston Villa', status: 'On loan', img: '/images/salah.jpeg' },
+  { name: 'Martin Zubimendi', clubs: 'Sociedad → Arsenal', status: '€60M', img: '/images/lewa.jpg' },
+  { name: 'Jamie Gittens', clubs: 'Dortmund → Chelsea', status: '€64.4M', img: '/images/481111091_1265260571625564_3913554759385537875_n.jpg' },
+];
 
 const LandingPage = () => {
+  const [page, setPage] = useState('landing');
+
+  // Handlers for switching pages
+  const showLanding = () => setPage('landing');
+  const showSignIn = () => setPage('signin');
+  const showGetStarted = () => setPage('getstarted');
+
+  // Navbar (always visible)
+  const Navbar = (
+    <nav className="nav">
+      <div className="nav-container">
+        <div className="nav-logo" style={{ cursor: 'pointer' }} onClick={showLanding}>
+          <img src="/images/xtra time logo only 1.png" alt="XtraTime" />
+          <span>XtraTime</span>
+        </div>
+        <div className="nav-links">
+          <a href="#home" onClick={showLanding}>Home</a>
+          <a href="#features">Features</a>
+          <a href="#matches">Matches</a>
+          <a href="#leagues">Leagues</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div className="nav-actions">
+          <button className="btn-secondary" onClick={showSignIn}>Sign In</button>
+          <button className="btn-primary" onClick={showGetStarted}>Get Started</button>
+        </div>
+      </div>
+    </nav>
+  );
+
+  // Render the correct page
+  let content;
+  if (page === 'signin') {
+    content = <SignIn onGetStarted={showGetStarted} />;
+  } else if (page === 'getstarted') {
+    content = <GetStarted onSignIn={showSignIn} />;
+  } else {
+    content = (
+      <>
+        {/* Background */}
+        <div
+          className="hero-background"
+          style={{
+            background: "url('/images/bg.png') center/cover no-repeat fixed"
+          }}
+        >
+          <div className="hero-overlay"></div>
+        </div>
+
+        {/* Hero Section */}
+        <section className="hero">
+          <div className="hero-container">
+            <div className="hero-content">
+              <h1 className="hero-title">
+                Your Ultimate
+                <span className="gradient-text"> Football</span>
+                <br />Experience
+              </h1>
+              <p className="hero-subtitle">
+                Live scores, real-time stats, and comprehensive coverage of all major leagues. 
+                Never miss a moment of the beautiful game.
+              </p>
+              <div className="hero-actions">
+                <button className="btn-primary btn-large">
+                  Start Watching Live
+                </button>
+                <button className="btn-outline btn-large">
+                  Explore Leagues
+                </button>
+              </div>
+              <div className="hero-stats">
+                <div className="stat-item">
+                  <span className="stat-number">50+</span>
+                  <span className="stat-label">Leagues</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-number">1000+</span>
+                  <span className="stat-label">Matches</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-number">10M+</span>
+                  <span className="stat-label">Users</span>
+                </div>
+              </div>
+            </div>
+            <div className="hero-visual">
+              <div className="glass-card hero-card">
+                <div className="match-preview">
+                  <div className="match-header">
+                    <span className="league-name">Premier League</span>
+                    <span className="match-time">LIVE</span>
+                  </div>
+                  <div className="match-teams">
+                    <div className="team">
+                      <img src="/images/salah.jpeg" alt="Liverpool" />
+                      <span>Liverpool</span>
+                    </div>
+                    <div className="score">
+                      <span>2</span>
+                      <span>-</span>
+                      <span>1</span>
+                    </div>
+                    <div className="team">
+                      <img src="/images/lewa.jpg" alt="Arsenal" />
+                      <span>Arsenal</span>
+                    </div>
+                  </div>
+                  <div className="match-stats">
+                    <div className="stat">
+                      <span className="stat-value">65%</span>
+                      <span className="stat-label">Possession</span>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-value">12</span>
+                      <span className="stat-label">Shots</span>
+                    </div>
+                    <div className="stat">
+                      <span className="stat-value">5</span>
+                      <span className="stat-label">Corners</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section className="features">
+          <div className="container">
+            <div className="section-header">
+              <h2>Why Choose XtraTime?</h2>
+              <p>Experience football like never before with our cutting-edge platform</p>
+            </div>
+            <div className="features-grid">
+              <div className="feature-card">
+                <div className="feature-icon">⚽</div>
+                <h3>Live Scores</h3>
+                <p>Real-time updates from all major leagues and competitions worldwide</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon">📊</div>
+                <h3>Advanced Stats</h3>
+                <p>Comprehensive statistics and analytics for every match and player</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon">🎯</div>
+                <h3>Predictions</h3>
+                <p>AI-powered match predictions and betting insights</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon">📱</div>
+                <h3>Mobile First</h3>
+                <p>Optimized for all devices with seamless cross-platform experience</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon">🔔</div>
+                <h3>Smart Notifications</h3>
+                <p>Customizable alerts for goals, cards, and match events</p>
+              </div>
+              <div className="feature-card">
+                <div className="feature-icon">🌍</div>
+                <h3>Global Coverage</h3>
+                <p>Coverage of leagues from every continent and country</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Live Matches Section */}
+        <section className="live-matches">
+          <div className="container">
+            <div className="section-header">
+              <h2>Live Matches</h2>
+              <p>Watch the action unfold in real-time</p>
+            </div>
+            <div className="matches-grid">
+              <div className="match-card">
+                <div className="match-status live">LIVE</div>
+                <div className="match-league">Champions League</div>
+                <div className="match-teams">
+                  <div className="team">
+                    <img src="/images/salah.jpeg" alt="Real Madrid" />
+                    <span>Real Madrid</span>
+                  </div>
+                  <div className="score">
+                    <span>1</span>
+                    <span>-</span>
+                    <span>0</span>
+                  </div>
+                  <div className="team">
+                    <img src="/images/lewa.jpg" alt="Bayern Munich" />
+                    <span>Bayern Munich</span>
+                  </div>
+                </div>
+                <div className="match-time">67'</div>
+              </div>
+              <div className="match-card">
+                <div className="match-status upcoming">20:45</div>
+                <div className="match-league">Premier League</div>
+                <div className="match-teams">
+                  <div className="team">
+                    <img src="/images/481111091_1265260571625564_3913554759385537875_n.jpg" alt="Manchester City" />
+                    <span>Man City</span>
+                  </div>
+                  <div className="score">
+                    <span>-</span>
+                    <span>-</span>
+                    <span>-</span>
+                  </div>
+                  <div className="team">
+                    <img src="/images/salah.jpeg" alt="Chelsea" />
+                    <span>Chelsea</span>
+                  </div>
+                </div>
+                <div className="match-time">Today</div>
+              </div>
+              <div className="match-card">
+                <div className="match-status live">LIVE</div>
+                <div className="match-league">La Liga</div>
+                <div className="match-teams">
+                  <div className="team">
+                    <img src="/images/lewa.jpg" alt="Barcelona" />
+                    <span>Barcelona</span>
+                  </div>
+                  <div className="score">
+                    <span>2</span>
+                    <span>-</span>
+                    <span>2</span>
+                  </div>
+                  <div className="team">
+                    <img src="/images/481111091_1265260571625564_3913554759385537875_n.jpg" alt="Atletico Madrid" />
+                    <span>Atletico Madrid</span>
+                  </div>
+                </div>
+                <div className="match-time">89'</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="cta">
+          <div className="container">
+            <div className="cta-content">
+              <h2>Ready to Experience Football Like Never Before?</h2>
+              <p>Join millions of football fans worldwide and never miss a moment of the beautiful game.</p>
+              <div className="cta-actions">
+                <button className="btn-primary btn-large">Start Free Trial</button>
+                <button className="btn-outline btn-large">Learn More</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="footer">
+          <div className="container">
+            <div className="footer-content">
+              <div className="footer-section">
+                <div className="footer-logo">
+                  <img src="/images/xtra time logo only 1.png" alt="XtraTime" />
+                  <span>XtraTime</span>
+                </div>
+                <p>The ultimate football experience platform</p>
+              </div>
+              <div className="footer-section">
+                <h4>Product</h4>
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">API</a>
+              </div>
+              <div className="footer-section">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+              </div>
+              <div className="footer-section">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Contact</a>
+                <a href="#">Status</a>
+              </div>
+            </div>
+            <div className="footer-bottom">
+              <p>&copy; 2024 XtraTime. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </>
+    );
+  }
+
   return (
-    <div className="landing-page" style={{position: 'relative', minHeight: '100vh'}}>
-      {/* BG image with 10% opacity overlay */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: 0,
-        pointerEvents: 'none',
-        background: "url('/images/bg.png') center/cover no-repeat fixed"
-      }}>
-        <div style={{width: '100%', height: '100%', background: 'rgba(24,24,24,0.9)'}} />
-      </div>
-
-      {/* Navbar */}
-      <nav className="navbar" style={{position: 'relative', zIndex: 2}}>
-        <div className="navbar-left">
-          <img src="/images/xtra time logo only 1.png" alt="Logo" className="navbar-logo" style={{width: 44, height: 44, objectFit: 'contain'}} />
-          <ul className="navbar-links">
-            <li>Leagues</li>
-            <li>Matches</li>
-            <li>Players</li>
-          </ul>
-          <div className="navbar-actions">
-            <input type="text" className="navbar-search" placeholder="Search..." />
-            <img src="/images/notification-2 1.png" alt="Notifications" className="navbar-icon" style={{width: 32, height: 32, objectFit: 'contain'}} />
-            <img src="/images/Vector.png" alt="Account" className="navbar-icon" style={{width: 32, height: 32, objectFit: 'contain'}} />
-          </div>
-        </div>
-      </nav>
-
-      {/* Main grid layout */}
-      <div className="main-grid" style={{position: 'relative', zIndex: 1}}>
-        {/* Top Leagues */}
-        <div className=" grid-top-leagues">
-          <div className="top-leagues-title">Top Leagues</div>
-          <div className="league-icons-row">
-            <div className=" glass-card league-icon-glass" style={{position: 'relative'}}>
-              <img src="/images/pngwing.com 1.png" alt="Premier League" />
-              <span className="league-badge">
-                <img src="/images/notification-2 1.png" alt="badge" />
-              </span>
-            </div>
-            <div className=" glass-card league-icon-glass">
-              <img src="/images/laliga-seeklogo 1.png" alt="La Liga" />
-            </div>
-            <div className=" glass-card league-icon-glass">
-              <img src="/images/pngwing.com-3 1.png" alt="Champions League" />
-            </div>
-            <div className=" glass-card league-icon-glass">
-              <img src="/images/pngwing.com-2 1.png" alt="Bundesliga" />
-            </div>
-          </div>
-        </div>
-
-        {/* Live Scores & Stats - Replacing League Table */}
-        <div className="glass-card grid-league-table" style={{padding: 32, display: 'flex', flexDirection: 'column', gap: 24}}>
-          <div style={{fontSize: '2.4rem', fontWeight: 800, color: '#fff', marginBottom: 8, textAlign: 'center'}}>
-            Live Scores & Stats
-          </div>
-          
-          {/* Live Match Card */}
-          <div className="glass-card" style={{
-            background: 'rgba(255, 255, 255, 0.12)',
-            borderRadius: 20,
-            padding: 24,
-            border: '1px solid rgba(255, 255, 255, 0.25)',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                <img src="/images/pngwing.com-1.png" alt="Premier League" style={{width: 24, height: 24}} />
-                <span style={{color: '#bdbdbd', fontSize: '1rem', fontWeight: 600}}>Premier League</span>
-              </div>
-              <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                <div style={{width: 10, height: 10, borderRadius: '50%', background: '#ff4444', animation: 'pulse 2s infinite'}}></div>
-                <span style={{color: '#ff4444', fontSize: '1rem', fontWeight: 700}}>LIVE</span>
-              </div>
-            </div>
-            
-            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: 16, flex: 1}}>
-                <img src="/images/pngwing.com-5 1.png" alt="Liverpool" style={{width: 40, height: 40, borderRadius: '50%'}} />
-                <span style={{color: '#fff', fontWeight: 700, fontSize: '1.2rem'}}>Liverpool</span>
-              </div>
-              <div style={{display: 'flex', alignItems: 'center', gap: 20}}>
-                <span style={{color: '#fff', fontWeight: 900, fontSize: '2rem'}}>2</span>
-                <span style={{color: '#bdbdbd', fontSize: '1.1rem', fontWeight: 600}}>vs</span>
-                <span style={{color: '#fff', fontWeight: 900, fontSize: '2rem'}}>1</span>
-              </div>
-              <div style={{display: 'flex', alignItems: 'center', gap: 16, flex: 1, justifyContent: 'flex-end'}}>
-                <span style={{color: '#fff', fontWeight: 700, fontSize: '1.2rem'}}>Man City</span>
-                <img src="/images/pngwing.com-4 1.png" alt="Man City" style={{width: 40, height: 40, borderRadius: '50%'}} />
-              </div>
-            </div>
-            
-            <div style={{textAlign: 'center'}}>
-              <span style={{color: '#bdbdbd', fontSize: '1rem', fontWeight: 600}}>67'</span>
-            </div>
-          </div>
-
-          {/* Stats Cards Row */}
-          <div style={{display: 'flex', gap: 20, flex: 1}}>
-            {/* Top Scorer Card */}
-            <div className="glass-card" style={{
-              background: 'rgba(255, 255, 255, 0.1)',
-              borderRadius: 16,
-              padding: 20,
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 12
-            }}>
-              <img src="/images/salah.jpeg" alt="Top Scorer" style={{width: 56, height: 56, borderRadius: '50%', objectFit: 'cover'}} />
-              <span style={{color: '#fff', fontWeight: 700, fontSize: '1rem', textAlign: 'center'}}>Top Scorer</span>
-              <span style={{color: '#ffe600', fontWeight: 900, fontSize: '1.4rem'}}>31</span>
-            </div>
-
-            {/* Assists Leader Card */}
-            <div className="glass-card" style={{
-              background: 'rgba(255, 255, 255, 0.1)',
-              borderRadius: 16,
-              padding: 20,
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 12
-            }}>
-              <img src="/images/lewa.jpg" alt="Assists Leader" style={{width: 56, height: 56, borderRadius: '50%', objectFit: 'cover'}} />
-              <span style={{color: '#fff', fontWeight: 700, fontSize: '1rem', textAlign: 'center'}}>Assists</span>
-              <span style={{color: '#00ff88', fontWeight: 900, fontSize: '1.4rem'}}>18</span>
-            </div>
-
-            {/* Clean Sheets Card */}
-            <div className="glass-card" style={{
-              background: 'rgba(255, 255, 255, 0.1)',
-              borderRadius: 16,
-              padding: 20,
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 12
-            }}>
-              <div style={{width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(45deg, #4CAF50, #8BC34A)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <span style={{color: '#fff', fontWeight: 900, fontSize: '1.8rem'}}>🧤</span>
-              </div>
-              <span style={{color: '#fff', fontWeight: 700, fontSize: '1rem', textAlign: 'center'}}>Clean Sheets</span>
-              <span style={{color: '#4CAF50', fontWeight: 900, fontSize: '1.4rem'}}>12</span>
-            </div>
-          </div>
-
-          {/* Recent Results */}
-          <div style={{flex: 1, display: 'flex', flexDirection: 'column', gap: 12}}>
-            <span style={{color: '#fff', fontWeight: 700, fontSize: '1.2rem', marginBottom: 12}}>Recent Results</span>
-            {[
-              {home: 'Arsenal', away: 'Chelsea', score: '3-1', league: 'Premier League'},
-              {home: 'Barcelona', away: 'Real Madrid', score: '2-2', league: 'La Liga'},
-              {home: 'Bayern', away: 'Dortmund', score: '4-0', league: 'Bundesliga'}
-            ].map((match, index) => (
-              <div key={index} className="glass-card" style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                borderRadius: 12,
-                padding: 16,
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}>
-                <div style={{display: 'flex', alignItems: 'center', gap: 12, flex: 1}}>
-                  <span style={{color: '#fff', fontWeight: 600, fontSize: '1rem'}}>{match.home}</span>
-                </div>
-                <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
-                  <span style={{color: '#fff', fontWeight: 700, fontSize: '1.1rem'}}>{match.score}</span>
-                </div>
-                <div style={{display: 'flex', alignItems: 'center', gap: 12, flex: 1, justifyContent: 'flex-end'}}>
-                  <span style={{color: '#fff', fontWeight: 600, fontSize: '1rem'}}>{match.away}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Top Player */}
-        <div className="glass-card grid-top-player top-player-card">
-          <img src="/images/lewa.jpg" alt="Top Player" />
-          <div className="overlay"></div>
-          <div className="content">
-            <div className="title">Top Player</div>
-            <div className="player-info">Lewandowski<br />Barcelona</div>
-          </div>
-        </div>
-
-        {/* News */}
-        <div className="glass-card grid-news news-card">
-          <img src="/images/jota.jpg" alt="News" />
-          <div className="overlay"></div>
-          <div className="content">
-            <div className="title">News</div>
-            <div className="player-info">Diogo Jota<br />1996-2025</div>
-          </div>
-        </div>
-
-        {/* Today's Matches */}
-        <div className=" grid-today-matches">
-          <div style={{ padding: '28px', width: '100%' }}>
-            <div style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 18, fontFamily: 'Inter, sans-serif',textAlign: 'left' }}>Today's Matches</div>
-            <div className="today-matches-list">
-              {/* Match 1 */}
-              <div className="glass-card today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-3 1.png" alt="Champions League" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  UEFA Champions League, Playoff - 2nd leg
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-3 1.png" alt="Chelsea" />
-                      Chelsea
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-4 1.png" alt="Everton" />
-                      Everton
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">20:00</span>
-                    <span className="today-match-channel">Eurosport</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 2 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-2 1.png" alt="Bundesliga" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  Bundesliga
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-2 1.png" alt="Wolfsburg" />
-                      VfL Wolfsburg
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-5 1.png" alt="Nurnberg" />
-                      1. FC Nürnberg
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">20:00</span>
-                    <span className="today-match-channel">Eurosport</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 7 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-1.png" alt="Premier League" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  Premier League
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-5 1.png" alt="Leicester" />
-                      Leicester
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-4 1.png" alt="West Ham" />
-                      West Ham
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">17:00</span>
-                    <span className="today-match-channel">Sky Sports</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 3 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-1.png" alt="Premier League" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  Premier League
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-5 1.png" alt="Liverpool" />
-                      Liverpool
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-4 1.png" alt="Man City" />
-                      Man City
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">18:30</span>
-                    <span className="today-match-channel">Sky Sports</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 4 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-2 1.png" alt="Bundesliga" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  Bundesliga
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-2 1.png" alt="Bayern" />
-                      Bayern
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-5 1.png" alt="Dortmund" />
-                      Dortmund
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">21:00</span>
-                    <span className="today-match-channel">Eurosport</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 8 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-2 1.png" alt="Bundesliga" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  Bundesliga
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-2 1.png" alt="Leipzig" />
-                      Leipzig
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-5 1.png" alt="Frankfurt" />
-                      Frankfurt
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">16:00</span>
-                    <span className="today-match-channel">Eurosport</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 5 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-3 1.png" alt="Champions League" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  UEFA Champions League
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-3 1.png" alt="PSG" />
-                      PSG
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-4 1.png" alt="Real Madrid" />
-                      Real Madrid
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">22:00</span>
-                    <span className="today-match-channel">beIN Sports</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 6 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-1.png" alt="Premier League" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  Premier League
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-5 1.png" alt="Arsenal" />
-                      Arsenal
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-4 1.png" alt="Tottenham" />
-                      Tottenham
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">19:00</span>
-                    <span className="today-match-channel">Sky Sports</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-              {/* Match 9 */}
-              <div className="today-match-card">
-                <div className="today-match-header">
-                  <img src="/images/pngwing.com-3 1.png" alt="Champions League" style={{ width: 18, height: 18, marginRight: 6 }} />
-                  UEFA Champions League
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <div className="today-match-teams">
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-3 1.png" alt="Inter" />
-                      Inter
-                    </div>
-                    <span style={{ color: '#bdbdbd', fontWeight: 600, fontSize: 18, margin: '0 4px' }}>/</span>
-                    <div className="today-match-team">
-                      <img src="/images/pngwing.com-4 1.png" alt="Atletico" />
-                      Atletico
-                    </div>
-                  </div>
-                  <div className="today-match-meta">
-                    <div className="today-match-indicators">
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator"></span>
-                      <span className="today-match-indicator red"></span>
-                      <span className="today-match-indicator red"></span>
-                    </div>
-                    <span className="today-match-time">23:00</span>
-                    <span className="today-match-channel">beIN Sports</span>
-                    <img src="/images/notification-2 1.png" alt="Bell" className="today-match-bell" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Combined Matches + Top Scorers Card (like Figma) */}
-        <div className="glass-card grid-match1" style={{ gridColumn: '1 / span 5', gridRow: '4 / span 2', display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'space-between', padding: 0, minHeight: 320 }}>
-          {/* Top Scorers */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 32 }}>
-            <div style={{ fontSize: '2rem', fontWeight: 900, marginBottom: 16, color: '#fff' }}>Premier League<br />Top Scorers</div>
-            {[1, 2, 3].map((_, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-                <img src="/images/salah.jpeg" alt="Salah" style={{ width: 48, height: 48, borderRadius: '50%', objectFit: 'cover' }} />
-                <div style={{ fontWeight: 700, color: '#fff' }}>Mohammed Salah</div>
-                <div style={{ fontWeight: 900, color: '#ffe600', fontSize: '1.3rem' }}>31<span style={{ color: '#fff', fontSize: '1.1rem', marginLeft: 4 }}>★</span></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="landing-page">
+      {Navbar}
+      {content}
     </div>
   );
 };
