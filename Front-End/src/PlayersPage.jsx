@@ -6,7 +6,6 @@ import { fetchPlayers, fetchLeagues } from './api/players';
 
 // Dummy data
 const kubarsiImg = '/images/kubarsi.png';
-const bgImage = '/images/playersbg.jpg';
 const defaultPlayerImage = '/images/kubarsi.png';
 
 const leagueLogos = [
@@ -245,7 +244,7 @@ const PlayersPage = () => {
   return (
     <div className="landing-page" style={{ minHeight: '100vh', position: 'relative' }}>
       {/* Background */}
-      <div className="hero-background" style={{ background: `url('${bgImage}') center/cover no-repeat fixed`, transition: 'background 0.7s cubic-bezier(.4,2,.3,1)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+      <div className="hero-background" style={{ background: `url('/images/playersbg.jpg') center/cover no-repeat fixed`, transition: 'background 0.7s cubic-bezier(.4,2,.3,1)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.35)', zIndex: 1 }}></div>
       </div>
       <div style={{ maxWidth: 1300, margin: '0 auto', padding: '6rem 2rem 2rem 2rem', position: 'relative', zIndex: 2, transition: 'all 0.5s cubic-bezier(.4,2,.3,1)' }}>
@@ -276,51 +275,102 @@ const PlayersPage = () => {
             </div>
           ))}
         </div>
-        {/* Club Selector Carousel (logos only, no big container) */}
-        <div style={{ display: 'flex', gap: '2.5rem', marginBottom: 32, justifyContent: 'center', alignItems: 'center' }}>
-          {league.teams.map((t, idx) => (
-            <div
-              key={t.name}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                cursor: 'pointer',
-              }}
-              onClick={() => { setSelectedTeamIdx(idx); setSelectedPlayerIdx(null); }}
-            >
-              <div style={{ background: idx === selectedTeamIdx ? '#fff' : '#fff', borderRadius: '50%', width: 64, height: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', border: idx === selectedTeamIdx ? '3px solid #111' : '2px solid #eee', boxShadow: idx === selectedTeamIdx ? '0 2px 12px rgba(0,0,0,0.10)' : 'none', marginBottom: 8, transition: 'all 0.2s' }}>
-                <img src="/images/barca.webp" alt={t.name} style={{ width: 40, height: 40, objectFit: 'contain' }} />
+        {/* Club Selector with Horizontal Scroll */}
+        <div style={{ 
+          width: '100%',
+          maxWidth: '800px',
+          margin: '0 auto 32px',
+          overflow: 'hidden',
+          position: 'relative'
+        }}>
+          <div style={{ 
+            display: 'flex',
+            gap: '2.5rem',
+            alignItems: 'center',
+            overflowX: 'auto',
+            padding: '1rem 0',
+            scrollbarWidth: 'none', // Firefox
+            msOverflowStyle: 'none', // IE and Edge
+            '&::-webkit-scrollbar': { display: 'none' }, // Chrome and Safari
+            scrollBehavior: 'smooth'
+          }}>
+            {league.teams.map((t, idx) => (
+              <div
+                key={t.name}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  flex: '0 0 auto',
+                  width: '120px', // Fixed width for each club item
+                }}
+                onClick={() => { setSelectedTeamIdx(idx); setSelectedPlayerIdx(null); }}
+              >
+                <div style={{ 
+                  background: idx === selectedTeamIdx ? '#fff' : '#fff', 
+                  borderRadius: '50%', 
+                  width: 64, 
+                  height: 64, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  border: idx === selectedTeamIdx ? '3px solid #111' : '2px solid #eee', 
+                  boxShadow: idx === selectedTeamIdx ? '0 2px 12px rgba(0,0,0,0.10)' : 'none', 
+                  marginBottom: 8, 
+                  transition: 'all 0.2s' 
+                }}>
+                  <img src="/images/barca.webp" alt={t.name} style={{ width: 40, height: 40, objectFit: 'contain' }} />
+                </div>
+                <span style={{ 
+                  fontFamily: 'Neue Plak Condensed', 
+                  fontWeight: 900, 
+                  fontSize: 18, 
+                  color: idx === selectedTeamIdx ? '#fff' : '#fff', 
+                  marginTop: 2,
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '100%'
+                }}>{t.name}</span>
               </div>
-              <span style={{ fontFamily: 'Neue Plak Condensed', fontWeight: 900, fontSize: 18, color: idx === selectedTeamIdx ? '#fff' : '#fff', marginTop: 2 }}>{t.name}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
         {/* Main Content */}
         <div style={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.5s cubic-bezier(.4,2,.3,1)' }}>
-          {/* Player Gallery Carousel */}
+          {/* Player Gallery with Horizontal Scroll */}
           {selectedPlayerIdx === null ? (
-            <div style={{ width: '100%', height: 'calc(100vh - 200px)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '4rem 0', overflow: 'hidden', fontFamily: 'Archivo, sans-serif' }}>
-              {/* Left Arrow */}
-              <button onClick={handlePrev} style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 3, background: 'rgba(0,0,0,0.3)', border: 'none', borderRadius: '50%', width: 56, height: 56, color: 'white', fontSize: 32, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.18)' }}>&lt;</button>
-              {/* Carousel */}
-              <div style={{ display: 'flex', gap: 100, alignItems: 'flex-end', justifyContent: 'center', width: '100%', overflow: 'visible', position: 'relative', minHeight: 380, margin: '0 auto' }}>
+            <div style={{ 
+              width: '100%', 
+              height: 'calc(100vh - 200px)', 
+              position: 'relative', 
+              padding: '4rem 0', 
+              fontFamily: 'Archivo, sans-serif',
+              overflow: 'hidden'
+            }}>
+              {/* Scrollable Player Container */}
+              <div style={{ 
+                display: 'flex', 
+                gap: '2rem', 
+                alignItems: 'flex-end', 
+                width: '100%', 
+                overflowX: 'auto',
+                overflowY: 'hidden',
+                position: 'relative', 
+                minHeight: 380, 
+                margin: '0 auto',
+                padding: '0 2rem',
+                scrollBehavior: 'smooth',
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
+                '&::-webkit-scrollbar': { display: 'none' }
+              }}>
                 {teamPlayers.map((player, idx) => {
-                  const offset = idx - carouselIndex;
-                  let blur = 1;
-                  let zIndex = 1;
-                  let opacity = 0.5;
-                  let imgW = 220, imgH = 300, nameFont = 22, numSize = 48, numFont = 22;
-                  if (offset === 0) {
-                    blur = 0;
-                    zIndex = 3;
-                    opacity = 1;
-                    imgW = 260; imgH = 340; nameFont = 26; numSize = 54; numFont = 26;
-                  } else if (Math.abs(offset) === 1) {
-                    blur = 0.5;
-                    zIndex = 2;
-                    opacity = 0.8;
-                  }
+                  const imgW = 260, imgH = 340, nameFont = 26, numSize = 54, numFont = 26;
+                  const opacity = 1;
+                  const zIndex = 1;
                   const animDelay = staggered ? `${idx * 120}ms` : '0ms';
                   const [firstName, ...rest] = player.name.split(' ');
                   const lastName = rest.join(' ');
@@ -337,8 +387,7 @@ const PlayersPage = () => {
                         justifyContent: 'flex-end',
                         zIndex,
                         opacity,
-                        filter: `blur(${blur}px)` + (offset !== 0 ? ' grayscale(0.1)' : ''),
-                        transition: 'opacity 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s cubic-bezier(.4,0,.2,1)',
+                        transition: 'opacity 0.4s cubic-bezier(.4,0,.2,1)',
                         position: 'relative',
                         cursor: 'pointer',
                         animation: staggered ? 'fadeIn 0.7s cubic-bezier(.4,0,.2,1) both' : undefined,
@@ -352,24 +401,23 @@ const PlayersPage = () => {
                       tabIndex={0}
                     >
                       <SpotlightCard
-                        className={`custom-spotlight-card${offset === 0 ? ' center' : ''}`}
-                        spotlightColor="rgba(0, 229, 255, 0.2)"
-                        style={{
-                          width: imgW,
-                          height: imgH,
-                          borderRadius: 32,
-                          boxShadow: offset === 0 ? '0 12px 40px 0 rgba(0,0,0,0.45)' : '0 4px 18px rgba(0,0,0,0.22)',
-                          overflow: 'visible',
-                          marginBottom: 0,
-                          pointerEvents: 'auto',
-                          transition: 'box-shadow 0.4s cubic-bezier(.4,0,.2,1), width 0.4s cubic-bezier(.4,0,.2,1), height 0.4s cubic-bezier(.4,0,.2,1), border-radius 0.4s cubic-bezier(.4,0,.2,1)',
-                          position: 'relative',
-                        }}
+                                              className="custom-spotlight-card"
+                      spotlightColor="rgba(0, 229, 255, 0.2)"
+                      style={{
+                        width: imgW,
+                        height: imgH,
+                        borderRadius: 32,
+                        boxShadow: '0 12px 40px 0 rgba(0,0,0,0.45)',
+                        overflow: 'visible',
+                        marginBottom: 0,
+                        pointerEvents: 'auto',
+                        transition: 'box-shadow 0.4s cubic-bezier(.4,0,.2,1), width 0.4s cubic-bezier(.4,0,.2,1), height 0.4s cubic-bezier(.4,0,.2,1), border-radius 0.4s cubic-bezier(.4,0,.2,1)',
+                        position: 'relative',
+                      }}
                       >
                         <img
                           src={player.img}
                           alt={player.name}
-                          id={offset === 0 ? 'active-player-img' : undefined}
                           style={{
                             width: imgW,
                             height: imgH,
@@ -420,10 +468,10 @@ const PlayersPage = () => {
                         color: 'white',
                         fontFamily: 'Neue Plak Condensed',
                         fontWeight: 900,
-                        fontSize: offset === 0 ? 38 : 30,
-                        letterSpacing: offset === 0 ? 1 : 0.5,
+                        fontSize: 38,
+                        letterSpacing: 1,
                         textShadow: '0 4px 16px rgba(0,0,0,0.85)',
-                        opacity: offset === 0 ? 1 : 0.7,
+                        opacity: 1,
                         zIndex: 4,
                         position: 'absolute',
                         bottom: 10,
@@ -437,8 +485,6 @@ const PlayersPage = () => {
                   );
                 })}
               </div>
-              {/* Right Arrow */}
-              <button onClick={handleNext} style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', zIndex: 3, background: 'rgba(0,0,0,0.3)', border: 'none', borderRadius: '50%', width: 56, height: 56, color: 'white', fontSize: 32, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.18)' }}>&gt;</button>
             </div>
           ) : (
             // Player Detail Split View with animation
