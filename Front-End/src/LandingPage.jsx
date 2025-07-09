@@ -206,14 +206,13 @@ function LandingPage() {
     </nav>
   );
 
-  // Render the correct page
   let content;
-  if (page === 'players') {
-    content = <PlayersPage />;
-  } else if (page === 'signin') {
-    content = <SignIn onGetStarted={showGetStarted} />;
+  if (page === 'signin') {
+    content = <SignIn onBack={showLanding} />;
   } else if (page === 'getstarted') {
-    content = <GetStarted onSignIn={showSignIn} />;
+    content = <GetStarted onBack={showLanding} />;
+  } else if (page === 'players') {
+    content = <PlayersPage onBack={showLanding} />;
   } else {
     content = (
       <>
@@ -221,13 +220,17 @@ function LandingPage() {
         <div
           className="hero-background"
           style={{
-            background: '#252525',
             position: 'fixed',
             top: 0,
             left: 0,
             width: '100vw',
             height: '100vh',
-            zIndex: 0
+            zIndex: 0,
+            backgroundImage: 'url("/images/DARKmode.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.95
           }}
         />
 
@@ -253,30 +256,7 @@ function LandingPage() {
             left: '50%',
             transform: 'translate(-50%, -50%)'
           }}>
-            <h1 style={{
-              fontSize: 'clamp(150px, 25vw, 400px)',
-              fontWeight: 900,
-              color: 'white',
-              margin: '0 auto',
-              lineHeight: 0.85,
-              fontFamily: 'Neue Plak Condensed',
-              letterSpacing: '-0.02em',
-              textTransform: 'uppercase',
-              userSelect: 'none',
-              textAlign: 'center',
-              width: '100%'
-            }}>
-              <div style={{ 
-                display: 'block', 
-                width: '100%', 
-                textAlign: 'center'
-              }}>XTRA</div>
-              <div style={{ 
-                display: 'block', 
-                width: '100%', 
-                textAlign: 'center'
-              }}>TIME</div>
-            </h1>
+            {/* Removed the XTRA TIME text */}
           </div>
         </section>
 
@@ -497,7 +477,7 @@ function LandingPage() {
                 letterSpacing: -2, 
                 color: 'white',
                 margin: 0
-              }}>XTRA TIME NEWS</h2>
+              }}>LATEST NEWS</h2>
               <div className="animate-fadeInRight" style={{ 
                 fontWeight: 900, 
                 fontSize: 24, 
