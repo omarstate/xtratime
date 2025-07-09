@@ -3,6 +3,7 @@ import './LandingPage.css';
 import SignIn from './SignIn';
 import GetStarted from './GetStarted';
 import PlayersPage from './PlayersPage';
+import Silk from './Silk';
 
 // LeagueRow component
 const LeagueRow = ({ name, code, logo, onViewMore }) => {
@@ -13,17 +14,17 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
       display: 'flex', 
       flexDirection: 'column',
       width: '100%',
-      background: 'white',
+      background: '#252525',
       borderRadius: '8px',
       overflow: 'hidden',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+      boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
     }}>
       <div style={{ 
         display: 'flex', 
         alignItems: 'center', 
         justifyContent: 'space-between',
         padding: '1.5rem 2rem',
-        borderBottom: isExpanded ? '1px solid #eee' : 'none'
+        borderBottom: isExpanded ? '1px solid #333' : 'none'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <img 
@@ -32,7 +33,8 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
             style={{ 
               height: '40px',
               width: 'auto',
-              objectFit: 'contain'
+              objectFit: 'contain',
+              filter: 'brightness(0) invert(1)'
             }} 
           />
           <span style={{ 
@@ -40,12 +42,12 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
             fontWeight: '900',
             fontFamily: 'Neue Plak Condensed',
             letterSpacing: '0.5px',
-            color: 'black',
+            color: 'white',
             textTransform: 'uppercase'
           }}>{name}</span>
           <span style={{ 
             fontSize: '1rem',
-            color: '#666',
+            color: '#999',
             marginLeft: '0.5rem',
             opacity: 0.7,
             fontWeight: '500'
@@ -61,13 +63,13 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
             border: 'none',
             fontSize: '1rem',
             fontWeight: '600',
-            color: '#111',
+            color: '#fff',
             cursor: 'pointer',
             padding: '0.5rem 1rem',
             borderRadius: '4px',
             transition: 'all 0.2s'
           }}
-          onMouseEnter={e => e.target.style.background = '#f5f5f5'}
+          onMouseEnter={e => e.target.style.background = '#333'}
           onMouseLeave={e => e.target.style.background = 'none'}
         >
           VIEW MORE
@@ -78,38 +80,38 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
       {isExpanded && (
         <div style={{
           padding: '2rem',
-          background: '#f9f9f9',
-          borderTop: '1px solid #eee'
+          background: '#1a1a1a',
+          borderTop: '1px solid #333'
         }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ borderBottom: '2px solid #eee' }}>
-                <th style={{ padding: '1rem', textAlign: 'left' }}>Position</th>
-                <th style={{ padding: '1rem', textAlign: 'left' }}>Club</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Played</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Won</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Drawn</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Lost</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>GF</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>GA</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>GD</th>
-                <th style={{ padding: '1rem', textAlign: 'center' }}>Points</th>
+              <tr style={{ borderBottom: '2px solid #333' }}>
+                <th style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Position</th>
+                <th style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Club</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Played</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Won</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Drawn</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Lost</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GF</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GA</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GD</th>
+                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Points</th>
               </tr>
             </thead>
             <tbody>
               {/* Dummy data - replace with actual league data */}
               {[1, 2, 3, 4].map(pos => (
-                <tr key={pos} style={{ borderBottom: '1px solid #eee' }}>
-                  <td style={{ padding: '1rem', textAlign: 'left' }}>{pos}</td>
-                  <td style={{ padding: '1rem', textAlign: 'left' }}>Team {pos}</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>10</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>7</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>2</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>1</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>22</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>8</td>
-                  <td style={{ padding: '1rem', textAlign: 'center' }}>+14</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 'bold' }}>23</td>
+                <tr key={pos} style={{ borderBottom: '1px solid #333' }}>
+                  <td style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>{pos}</td>
+                  <td style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Team {pos}</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>10</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>7</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>2</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>1</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>22</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>8</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>+14</td>
+                  <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 'bold', color: '#fff' }}>23</td>
                 </tr>
               ))}
             </tbody>
@@ -169,7 +171,7 @@ const transfers = [
   { name: 'Jamie Gittens', clubs: 'Dortmund → Chelsea', status: '€64.4M', img: '/images/481111091_1265260571625564_3913554759385537875_n.jpg' },
 ];
 
-const LandingPage = () => {
+function LandingPage() {
   const [page, setPage] = useState('landing');
   const [hoveredLogo, setHoveredLogo] = useState(null);
 
@@ -219,23 +221,79 @@ const LandingPage = () => {
         <div
           className="hero-background"
           style={{
-            background: "url('/images/xtraBg_.png') center/cover no-repeat fixed"
+            background: '#252525',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            zIndex: 0
           }}
-        >
-          {/* Removed hero-overlay to show background image clearly */}
-        </div>
+        />
 
         {/* Hero Section */}
-        <section className="hero">
-          <div className="hero-container">
-            {/* Only background image remains here */}
+        <section className="hero" style={{ 
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          zIndex: 1,
+          padding: '0 20px',
+          textAlign: 'center'
+        }}>
+          <div className="hero-container" style={{
+            width: '100%',
+            maxWidth: '1800px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+          }}>
+            <h1 style={{
+              fontSize: 'clamp(150px, 25vw, 400px)',
+              fontWeight: 900,
+              color: 'white',
+              margin: '0 auto',
+              lineHeight: 0.85,
+              fontFamily: 'Neue Plak Condensed',
+              letterSpacing: '-0.02em',
+              textTransform: 'uppercase',
+              userSelect: 'none',
+              textAlign: 'center',
+              width: '100%'
+            }}>
+              <div style={{ 
+                display: 'block', 
+                width: '100%', 
+                textAlign: 'center'
+              }}>XTRA</div>
+              <div style={{ 
+                display: 'block', 
+                width: '100%', 
+                textAlign: 'center'
+              }}>TIME</div>
+            </h1>
           </div>
         </section>
 
-        {/* New White Section for Main Content */}
-       <section style={{ background: 'white', color: 'black', padding: '3rem 0' }}>
+        {/* Divider */}
+        <div style={{
+          width: '100%',
+          height: '1px',
+          background: '#333',
+          margin: '0 auto',
+          position: 'relative',
+          zIndex: 1
+        }} />
+
+        {/* Main Content Section */}
+        <section style={{ background: '#252525', color: 'white', padding: '3rem 0', position: 'relative', zIndex: 1 }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {/* Bundesliga */}
+            {/* League rows remain the same */}
             <LeagueRow 
               name="BUNDESLIGA" 
               code="GR" 
@@ -243,7 +301,6 @@ const LandingPage = () => {
               onViewMore={() => handleViewMore('bundesliga')}
             />
 
-            {/* Premier League */}
             <LeagueRow 
               name="PREMIER LEAGUE" 
               code="EN" 
@@ -251,7 +308,6 @@ const LandingPage = () => {
               onViewMore={() => handleViewMore('premier-league')}
             />
 
-            {/* Serie A */}
             <LeagueRow 
               name="SERIE A" 
               code="IT" 
@@ -259,7 +315,6 @@ const LandingPage = () => {
               onViewMore={() => handleViewMore('serie-a')}
             />
 
-            {/* La Liga */}
             <LeagueRow 
               name="LA LIGA" 
               code="SP" 
@@ -269,8 +324,18 @@ const LandingPage = () => {
           </div>
         </section>
 
+        {/* Divider */}
+        <div style={{
+          width: '100%',
+          height: '1px',
+          background: '#333',
+          margin: '0 auto',
+          position: 'relative',
+          zIndex: 1
+        }} />
+
         {/* Today's Matches Section */}
-        <section style={{ background: 'white', color: 'black', padding: '4rem 0' }}>
+        <section style={{ background: '#252525', color: 'white', padding: '4rem 0', position: 'relative', zIndex: 1 }}>
           <div className="animate-fadeInUp" style={{ maxWidth: 1400, margin: '0 auto', padding: '0 2rem' }}>
             {/* Section Title */}
             <h2 className="animate-fadeInLeft" style={{ 
@@ -280,12 +345,12 @@ const LandingPage = () => {
               fontFamily: 'Neue Plak Condensed',
               textTransform: 'uppercase',
               letterSpacing: '-1px',
-              color: 'black'
+              color: 'white'
             }}>
               TODAY'S MATCHES
             </h2>
 
-            {/* Scrollable Match Cards Container */}
+            {/* Match cards container remains the same */}
             <div className="animate-fadeInRight delay-200" style={{
               width: '100%',
               overflowX: 'auto',
@@ -411,22 +476,33 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
-        {/* Football Area Section (replaces Features) */}
-        <section style={{ background: 'white', padding: '0', margin: 0, border: 'none', minHeight: '800px', position: 'relative' }}>
+
+        {/* Divider */}
+        <div style={{
+          width: '100%',
+          height: '1px',
+          background: '#333',
+          margin: '0 auto',
+          position: 'relative',
+          zIndex: 1
+        }} />
+
+        {/* Football Area Section */}
+        <section style={{ background: '#252525', padding: '0', margin: 0, border: 'none', minHeight: '800px', position: 'relative', zIndex: 1 }}>
           <div style={{ maxWidth: 1400, margin: '0 auto', padding: '3rem 0 8rem 0', position: 'relative' }}>
             <div className="animate-fadeInUp" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
               <h2 className="animate-fadeInLeft" style={{ 
                 fontWeight: 900, 
                 fontSize: 140, 
                 letterSpacing: -2, 
-                color: 'black',
+                color: 'white',
                 margin: 0
               }}>XTRA TIME NEWS</h2>
               <div className="animate-fadeInRight" style={{ 
                 fontWeight: 900, 
                 fontSize: 24, 
                 letterSpacing: 0.5, 
-                color: 'black', 
+                color: 'white', 
                 lineHeight: 1.1,
                 textAlign: 'right'
               }}>
@@ -434,7 +510,7 @@ const LandingPage = () => {
               </div>
             </div>
 
-            {/* Main Cards */}
+            {/* Cards section remains the same */}
             <div style={{ 
               display: 'flex', 
               gap: 40, 
@@ -519,7 +595,7 @@ const LandingPage = () => {
 
               {/* Card 2: Player Story */}
               <div className="animate-fadeInUp delay-200 hover-lift smooth-transition" style={{ 
-                background: '#222', 
+                background: '#181818', 
                 color: 'white', 
                 borderRadius: 32, 
                 padding: 0, 
@@ -821,9 +897,37 @@ const LandingPage = () => {
   }
 
   return (
-    <div className="landing-page">
-      {Navbar}
-      {content}
+    <div style={{ 
+      background: '#252525',
+      color: 'white',
+      minHeight: '100vh',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Silk Background */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 0,
+        opacity: 0.6
+      }}>
+        <Silk
+          speed={5}
+          scale={1}
+          color="#7B7481"
+          noiseIntensity={1.5}
+          rotation={0}
+        />
+      </div>
+
+      {/* Rest of the content */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {Navbar}
+        {content}
+      </div>
     </div>
   );
 };
