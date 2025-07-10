@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'General Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Add some base styles for better typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'General Sans', sans-serif;
+  font-weight: 700;
+}
+
+p, span, a, button, input, textarea {
+  font-family: 'General Sans', sans-serif;
+  font-weight: 400;
+}
+
+strong, b {
+  font-family: 'General Sans', sans-serif;
+  font-weight: 600;
+} 
