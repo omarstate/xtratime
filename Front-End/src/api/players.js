@@ -18,6 +18,22 @@ export const fetchPlayers = async () => {
   }
 };
 
+export const fetchPlayersByTeam = async (teamName) => {
+  try {
+    console.log('Fetching players for team:', teamName);
+    const response = await axios.get(`${API_BASE_URL}/players/team/${encodeURIComponent(teamName)}`);
+    console.log('Team players data received:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching players by team:', {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    throw error;
+  }
+};
+
 export const fetchLeagues = async () => {
   try {
     console.log('Fetching leagues from:', `${API_BASE_URL}/leagues`);

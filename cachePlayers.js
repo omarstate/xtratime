@@ -63,35 +63,61 @@ async function main() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ Connected to MongoDB');
 
-    const leagues = ['Spanish La Liga', 'English Premier League'];
+    const leagues = ['Spanish La Liga', 'English Premier League', 'Italian Serie A', 'German Bundesliga', 'French Ligue 1'];
 
     for (const league of leagues) {
-      console.log(`🔍 Fetching teams for league ${league}`);
+      console.log(`\n🏆 Processing league: ${league}`);
       const teamRes = await retryRequest(() => 
-        fetchWithRateLimit(`https://www.thesportsdb.com/api/v1/json/123/search_all_teams.php?l=${league}`)
+        fetchWithRateLimit(`https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=${league}`)
       );
       
+      if (!teamRes.data.teams) {
+        console.error(`❌ No teams found for league: ${league}`);
+        continue;
+      }
+
+      console.log(`📊 Found ${teamRes.data.teams.length} teams in ${league}`);
       const teams = teamRes.data.teams;
+
       for (const team of teams) {
-        console.log(`🔍 Fetching players for team ${team.strTeam}`);
+        console.log(`\n⚽ Processing team: ${team.strTeam} (ID: ${team.idTeam})`);
         
         try {
-          const players = await retryRequest(() =>
+          const playersResponse = await retryRequest(() =>
             fetchWithRateLimit(`https://www.thesportsdb.com/api/v1/json/123/lookup_all_players.php?id=${team.idTeam}`)
           );
 
-          for (let player of players.data.player || []) {
+          if (!playersResponse.data || !playersResponse.data.player) {
+            console.log(`⚠️ No players data found for team ${team.strTeam}`);
+            continue;
+          }
+
+          console.log(`📊 Found ${playersResponse.data.player.length} players for ${team.strTeam}`);
+
+          for (let player of playersResponse.data.player) {
+            if (!player.idPlayer) {
+              console.log(`⚠️ Invalid player data found, skipping...`);
+              continue;
+            }
+
+            const existing = await Player.findOne({idPlayer: player.idPlayer});
+            if (existing) {
+              console.log(`⏩ Skipping ${player.strPlayer} - already in database`);
+              continue;
+            }
+
             try {
-              console.log(`📝 Processing player: ${player.strPlayer}`);
+              console.log(`📝 Processing player: ${player.strPlayer} (ID: ${player.idPlayer})`);
               const playerData = await retryRequest(() =>
-                fetchWithRateLimit(`https://www.thesportsdb.com/api/v1/json/123/lookupplayer.php?id=${player.idPlayer}`)
+                fetchWithRateLimit(`https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=${player.idPlayer}`)
               );
 
-              const playerInfo = playerData.data.players[0];
-              if (!playerInfo) {
-                console.log(`⚠️ No data found for player ${player.strPlayer}, skipping...`);
+              if (!playerData.data || !playerData.data.players || !playerData.data.players[0]) {
+                console.log(`⚠️ No detailed data found for player ${player.strPlayer}, skipping...`);
                 continue;
               }
+
+              const playerInfo = playerData.data.players[0];
 
               const newPlayer = new Player({
                 idPlayer: playerInfo.idPlayer,
@@ -123,25 +149,33 @@ async function main() {
                 strCutout: playerInfo.strCutout,
                 strRender: playerInfo.strRender,
                 strNationality: playerInfo.strNationality,
-                status: playerInfo.status,
-                gender: playerInfo.gender,
+                status: playerInfo.strStatus || 'Active',
+                gender: playerInfo.strGender || 'Male',
               });
 
               await newPlayer.save();
-              console.log(`✅ Saved player: ${playerInfo.strPlayer}`);
+              console.log(`✅ Saved player: ${playerInfo.strPlayer} to ${team.strTeam}`);
             } catch (error) {
               console.error(`❌ Error processing player ${player.strPlayer}:`, error.message);
-              continue; // Skip this player and continue with the next one
+              continue;
             }
           }
         } catch (error) {
           console.error(`❌ Error fetching players for team ${team.strTeam}:`, error.message);
-          continue; // Skip this team and continue with the next one
+          if (error.response) {
+            console.error('Response status:', error.response.status);
+            console.error('Response data:', error.response.data);
+          }
+          continue;
         }
       }
     }
   } catch (error) {
     console.error('❌ Fatal error:', error.message);
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
   } finally {
     await mongoose.disconnect();
     console.log('📡 Disconnected from MongoDB');

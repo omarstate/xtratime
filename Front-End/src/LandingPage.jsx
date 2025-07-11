@@ -1,13 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LandingPage.css';
 import SignIn from './SignIn';
 import GetStarted from './GetStarted';
 import PlayersPage from './PlayersPage';
 import Silk from './Silk';
+import axios from 'axios';
 
 // LeagueRow component
-const LeagueRow = ({ name, code, logo, onViewMore }) => {
+const LeagueRow = ({ name, code, logo, onViewMore, leagueId }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [error, setError] = useState(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const fetchTableData = async () => {
+    if (leagueId) {
+      try {
+        setError(null);
+        const response = await axios.get(`https://www.thesportsdb.com/api/v1/json/3/lookuptable.php?l=${leagueId}&s=2024-2025`);
+        if (response.data && response.data.table) {
+          setTableData(response.data.table);
+        }
+      } catch (err) {
+        console.error('Error fetching table data:', err);
+        setError('Failed to load table data');
+      }
+    }
+  };
+
+  const handleToggle = () => {
+    if (isExpanded) {
+      setIsClosing(true);
+      setTimeout(() => {
+        setIsExpanded(false);
+        setIsClosing(false);
+      }, 300); // Match this with animation duration
+    } else {
+      setIsExpanded(true);
+      if (leagueId) fetchTableData();
+    }
+  };
+
+  useEffect(() => {
+    if (isExpanded && leagueId) {
+      fetchTableData();
+    }
+  }, [isExpanded, leagueId]);
 
   return (
     <div style={{ 
@@ -54,10 +92,7 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
           }}>{code}</span>
         </div>
         <button 
-          onClick={() => {
-            setIsExpanded(!isExpanded);
-            onViewMore();
-          }}
+          onClick={handleToggle}
           style={{
             background: 'none',
             border: 'none',
@@ -72,50 +107,299 @@ const LeagueRow = ({ name, code, logo, onViewMore }) => {
           onMouseEnter={e => e.target.style.background = '#333'}
           onMouseLeave={e => e.target.style.background = 'none'}
         >
-          VIEW MORE
+          {isExpanded ? 'HIDE TABLE' : 'VIEW TABLE'}
         </button>
       </div>
       
       {/* Dropdown Content */}
-      {isExpanded && (
+      {(isExpanded || isClosing) && (
         <div style={{
           padding: '2rem',
           background: '#1a1a1a',
-          borderTop: '1px solid #333'
+          borderTop: '1px solid #333',
+          animation: `${isClosing ? 'slideUp' : 'slideDown'} 0.3s ease-out forwards`
         }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ borderBottom: '2px solid #333' }}>
-                <th style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Position</th>
-                <th style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Club</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Played</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Won</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Drawn</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Lost</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GF</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GA</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GD</th>
-                <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Points</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Dummy data - replace with actual league data */}
-              {[1, 2, 3, 4].map(pos => (
-                <tr key={pos} style={{ borderBottom: '1px solid #333' }}>
-                  <td style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>{pos}</td>
-                  <td style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Team {pos}</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>10</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>7</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>2</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>1</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>22</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>8</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>+14</td>
-                  <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 'bold', color: '#fff' }}>23</td>
+          <style>
+            {`
+              @keyframes slideDown {
+                from {
+                  opacity: 0;
+                  transform: translateY(-20px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              
+              @keyframes slideUp {
+                from {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+                to {
+                  opacity: 0;
+                  transform: translateY(-20px);
+                }
+              }
+              
+              @keyframes fadeIn {
+                from {
+                  opacity: 0;
+                }
+                to {
+                  opacity: 1;
+                }
+              }
+              
+              .table-row {
+                animation: fadeIn 0.3s ease-out forwards;
+                opacity: 0;
+              }
+              
+              .table-row:nth-child(1) { animation-delay: 0.1s; }
+              .table-row:nth-child(2) { animation-delay: 0.15s; }
+              .table-row:nth-child(3) { animation-delay: 0.2s; }
+              .table-row:nth-child(4) { animation-delay: 0.25s; }
+              .table-row:nth-child(5) { animation-delay: 0.3s; }
+              .table-row:nth-child(6) { animation-delay: 0.35s; }
+              .table-row:nth-child(7) { animation-delay: 0.4s; }
+              .table-row:nth-child(8) { animation-delay: 0.45s; }
+              .table-row:nth-child(9) { animation-delay: 0.5s; }
+              .table-row:nth-child(10) { animation-delay: 0.55s; }
+              .table-row:nth-child(11) { animation-delay: 0.6s; }
+              .table-row:nth-child(12) { animation-delay: 0.65s; }
+              .table-row:nth-child(13) { animation-delay: 0.7s; }
+              .table-row:nth-child(14) { animation-delay: 0.75s; }
+              .table-row:nth-child(15) { animation-delay: 0.8s; }
+              .table-row:nth-child(16) { animation-delay: 0.85s; }
+              .table-row:nth-child(17) { animation-delay: 0.9s; }
+              .table-row:nth-child(18) { animation-delay: 0.95s; }
+              .table-row:nth-child(19) { animation-delay: 1s; }
+              .table-row:nth-child(20) { animation-delay: 1.05s; }
+              
+              .loading-spinner {
+                width: 40px;
+                height: 40px;
+                border: 3px solid #333;
+                border-top: 3px solid #fff;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+              }
+              
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            `}
+          </style>
+          
+          {error && (
+            <div style={{ 
+              textAlign: 'center', 
+              padding: '2rem', 
+              color: '#ff4444',
+              animation: 'fadeIn 0.3s ease-out forwards' 
+            }}>
+              {error}
+            </div>
+          )}
+          
+          {!error && tableData.length > 0 && (
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ 
+                  borderBottom: '2px solid #333',
+                  animation: 'fadeIn 0.3s ease-out forwards'
+                }}>
+                  <th style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Position</th>
+                  <th style={{ padding: '1rem', textAlign: 'left', color: '#fff' }}>Club</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Played</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Won</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Drawn</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Lost</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GF</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>GA</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>+/-</th>
+                  <th style={{ padding: '1rem', textAlign: 'center', color: '#fff' }}>Points</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tableData.map((team) => {
+                  // Determine if team is in relegation zone (last 3 positions)
+                  const isRelegationZone = tableData.length - team.intRank < 3;
+                  // Determine if team is champion (1st position)
+                  const isChampion = team.intRank === "1";
+                  // Determine if team qualified for Champions League (positions 2-4)
+                  const isChampionsLeague = ["2", "3", "4"].includes(team.intRank);
+                  // Determine Europa League qualification (5th position)
+                  const isEuropaLeague = team.intRank === "5";
+                  // Determine Conference League qualification (6th position)
+                  const isConferenceLeague = team.intRank === "6";
+                  
+                  // Helper function to get the appropriate color
+                  const getColor = () => {
+                    if (isChampion) return '#FFD700';
+                    if (isChampionsLeague) return '#1E90FF';
+                    if (isEuropaLeague) return '#FF4500'; // Changed from #FFA500 to #FF4500 (OrangeRed)
+                    if (isConferenceLeague) return '#32CD32';
+                    if (isRelegationZone) return '#ff4444';
+                    return '#fff';
+                  };
+
+                  // Helper function to get the appropriate background gradient
+                  const getGradient = () => {
+                    if (isChampion) {
+                      return 'linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,215,0,0.15) 50%, rgba(255,215,0,0.1) 100%)';
+                    }
+                    if (isChampionsLeague) {
+                      return 'linear-gradient(90deg, rgba(30,144,255,0.1) 0%, rgba(30,144,255,0.15) 50%, rgba(30,144,255,0.1) 100%)';
+                    }
+                    if (isEuropaLeague) {
+                      return 'linear-gradient(90deg, rgba(255,69,0,0.1) 0%, rgba(255,69,0,0.15) 50%, rgba(255,69,0,0.1) 100%)'; // Changed to match new orange
+                    }
+                    if (isConferenceLeague) {
+                      return 'linear-gradient(90deg, rgba(50,205,50,0.1) 0%, rgba(50,205,50,0.15) 50%, rgba(50,205,50,0.1) 100%)';
+                    }
+                    if (isRelegationZone) {
+                      return 'linear-gradient(90deg, rgba(255,0,0,0.1) 0%, rgba(255,0,0,0.15) 50%, rgba(255,0,0,0.1) 100%)';
+                    }
+                    return 'transparent';
+                  };
+
+                  return (
+                    <tr 
+                      key={team.idTeam} 
+                      className="table-row"
+                      style={{ 
+                        borderBottom: '1px solid #333',
+                        transition: 'all 0.3s ease',
+                        background: getGradient()
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = isChampion 
+                          ? 'rgba(255,215,0,0.2)'
+                          : isChampionsLeague
+                          ? 'rgba(30,144,255,0.2)'
+                          : isEuropaLeague
+                          ? 'rgba(255,69,0,0.2)' // Changed to match new orange
+                          : isConferenceLeague
+                          ? 'rgba(50,205,50,0.2)'
+                          : isRelegationZone
+                          ? 'rgba(255,0,0,0.2)'
+                          : '#2a2a2a';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.background = getGradient();
+                      }}
+                    >
+                      <td style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left', 
+                        color: getColor(),
+                        fontWeight: (isChampion || isChampionsLeague || isEuropaLeague || isConferenceLeague || isRelegationZone) ? '700' : 'normal'
+                      }}>{team.intRank}</td>
+                      <td style={{ 
+                        padding: '1rem', 
+                        textAlign: 'left', 
+                        color: getColor(),
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '1rem',
+                        fontWeight: (isChampion || isChampionsLeague || isEuropaLeague || isConferenceLeague || isRelegationZone) ? '700' : 'normal'
+                      }}>
+                        <img 
+                          src={team.strBadge} 
+                          alt={team.strTeam} 
+                          style={{ 
+                            width: '24px', 
+                            height: '24px', 
+                            objectFit: 'contain',
+                            transition: 'transform 0.2s ease',
+                            filter: isChampion 
+                              ? 'drop-shadow(0 0 3px rgba(255,215,0,0.5))'
+                              : isChampionsLeague
+                              ? 'drop-shadow(0 0 3px rgba(30,144,255,0.5))'
+                              : isEuropaLeague
+                              ? 'drop-shadow(0 0 3px rgba(255,69,0,0.5))' // Changed to match new orange
+                              : isConferenceLeague
+                              ? 'drop-shadow(0 0 3px rgba(50,205,50,0.5))'
+                              : 'none'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.2)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        />
+                        {team.strTeam}
+                        {isChampion && (
+                          <span style={{
+                            fontSize: '0.8em',
+                            color: '#FFD700',
+                            marginLeft: '0.5rem',
+                            fontWeight: 'bold'
+                          }}>• CHAMPIONS</span>
+                        )}
+                        {isChampionsLeague && (
+                          <span style={{
+                            fontSize: '0.8em',
+                            color: '#1E90FF',
+                            marginLeft: '0.5rem',
+                            fontWeight: 'bold'
+                          }}>• UCL</span>
+                        )}
+                        {isEuropaLeague && (
+                          <span style={{
+                            fontSize: '0.8em',
+                            color: '#FF4500', // Changed from #FFA500 to #FF4500
+                            marginLeft: '0.5rem',
+                            fontWeight: 'bold'
+                          }}>• UEL</span>
+                        )}
+                        {isConferenceLeague && (
+                          <span style={{
+                            fontSize: '0.8em',
+                            color: '#32CD32',
+                            marginLeft: '0.5rem',
+                            fontWeight: 'bold'
+                          }}>• UECL</span>
+                        )}
+                      </td>
+                      {/* Stats cells */}
+                      {['intPlayed', 'intWin', 'intDraw', 'intLoss', 'intGoalsFor', 'intGoalsAgainst', 'intGoalDifference'].map((stat) => (
+                        <td key={stat} style={{ 
+                          padding: '1rem', 
+                          textAlign: 'center', 
+                          color: getColor(),
+                          fontWeight: (isChampion || isChampionsLeague || isEuropaLeague || isConferenceLeague || isRelegationZone) ? '700' : 'normal'
+                        }}>{team[stat]}</td>
+                      ))}
+                      <td style={{ 
+                        padding: '1rem', 
+                        textAlign: 'center', 
+                        color: getColor(),
+                        fontWeight: 'bold',
+                        background: isChampion 
+                          ? 'linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.15) 50%, transparent 100%)'
+                          : isChampionsLeague
+                          ? 'linear-gradient(90deg, transparent 0%, rgba(30,144,255,0.15) 50%, transparent 100%)'
+                          : isEuropaLeague
+                          ? 'linear-gradient(90deg, transparent 0%, rgba(255,165,0,0.15) 50%, transparent 100%)'
+                          : isConferenceLeague
+                          ? 'linear-gradient(90deg, transparent 0%, rgba(50,205,50,0.15) 50%, transparent 100%)'
+                          : isRelegationZone
+                          ? 'linear-gradient(90deg, transparent 0%, rgba(255,0,0,0.15) 50%, transparent 100%)'
+                          : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
+                      }}>{team.intPoints}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     </div>
@@ -275,10 +559,19 @@ function LandingPage() {
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
             {/* League rows remain the same */}
             <LeagueRow 
+              name="SERIE A" 
+              code="IT" 
+              logo="/images/seria a.png"
+              onViewMore={() => handleViewMore('italian-serie-a')}
+              leagueId="4332"
+            />
+
+            <LeagueRow 
               name="BUNDESLIGA" 
-              code="GR" 
+              code="DE" 
               logo="/images/bundsliga.png"
-              onViewMore={() => handleViewMore('bundesliga')}
+              onViewMore={() => handleViewMore('german-bundesliga')}
+              leagueId="4331"
             />
 
             <LeagueRow 
@@ -286,20 +579,23 @@ function LandingPage() {
               code="EN" 
               logo="/images/prem.png"
               onViewMore={() => handleViewMore('premier-league')}
-            />
-
-            <LeagueRow 
-              name="SERIE A" 
-              code="IT" 
-              logo="/images/seria a.png"
-              onViewMore={() => handleViewMore('serie-a')}
+              leagueId="4328"
             />
 
             <LeagueRow 
               name="LA LIGA" 
-              code="SP" 
-              logo="/images/LIGA.png"
-              onViewMore={() => handleViewMore('la-liga')}
+              code="ES" 
+              logo="/images/laliga-logo.png"
+              onViewMore={() => handleViewMore('spanish-la-liga')}
+              leagueId="4335"
+            />
+
+            <LeagueRow 
+              name="LIGUE 1" 
+              code="FR" 
+              logo="/images/Ligue-1-logo.png"
+              onViewMore={() => handleViewMore('french-ligue-1')}
+              leagueId="4334"
             />
           </div>
         </section>
