@@ -3,6 +3,7 @@ import './LandingPage.css';
 import SignIn from './SignIn';
 import GetStarted from './GetStarted';
 import PlayersPage from './PlayersPage';
+import MatchesPage from './MatchesPage'; // Import MatchesPage
 import Silk from './Silk';
 import axios from 'axios';
 
@@ -456,7 +457,7 @@ const transfers = [
 ];
 
 function LandingPage() {
-  const [page, setPage] = useState('landing');
+  const [page, setPage] = useState('landing'); // 'landing', 'signin', 'getstarted', 'players', 'matches'
   const [hoveredLogo, setHoveredLogo] = useState(null);
 
   // Handlers for switching pages
@@ -464,6 +465,7 @@ function LandingPage() {
   const showSignIn = () => setPage('signin');
   const showGetStarted = () => setPage('getstarted');
   const showPlayers = () => setPage('players');
+  const showMatches = () => setPage('matches'); // Function to show matches page
 
   // Add handleViewMore function to the main component
   const handleViewMore = (league) => {
@@ -480,6 +482,7 @@ function LandingPage() {
             <a href="#home" onClick={showLanding} style={{ fontWeight: 700 }}>Home</a>
             <a href="#leagues" style={{ fontWeight: 700 }}>Leagues</a>
             <a href="#players" onClick={showPlayers} style={{ fontWeight: 700 }}>Players</a>
+            <a href="#matches" onClick={showMatches} style={{ fontWeight: 700 }}>Matches</a>
           </div>
         </div>
         <div className="nav-actions" style={{ fontWeight: 700 }}>
@@ -497,6 +500,8 @@ function LandingPage() {
     content = <GetStarted onBack={showLanding} />;
   } else if (page === 'players') {
     content = <PlayersPage onBack={showLanding} />;
+  } else if (page === 'matches') { // Add this block
+    content = <MatchesPage onBack={showLanding} />;
   } else {
     content = (
       <>
@@ -1208,4 +1213,4 @@ function LandingPage() {
   );
 };
 
-export default LandingPage; 
+export default LandingPage;

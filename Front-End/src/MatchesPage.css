@@ -1,0 +1,121 @@
+.matches-page-container {
+  display: flex;
+  justify-content: space-between;
+  background-color: #111;
+  color: white;
+  min-height: 100vh;
+  font-family: 'Neue Plak Condensed', sans-serif;
+  padding-top: 80px; /* Add padding for the nav bar */
+}
+
+.matches-main-content {
+  flex-grow: 1;
+  padding: 40px 20px;
+  background-color: #111;
+}
+
+.side-content {
+  width: 250px;
+  background-color: #111;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 40px; /* Add padding to side content */
+}
+
+.menu-section {
+  width: 250px;
+  background-color: #111;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px 20px;
+}
+
+.menu-title {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.leagues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.league-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.league-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.league-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.league-item span {
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.news-section {
+  width: 300px;
+  background-color: #111;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px 20px;
+}
+
+.section-title {
+  color: #fff;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.news-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+}
+
+.news-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.news-content {
+  padding: 15px;
+}
+
+.news-title {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.news-time {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
